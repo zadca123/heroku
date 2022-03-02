@@ -1,0 +1,18 @@
+from rest_framework import serializers
+from .models import Group, Task
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name', 'limit']
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = ['id', 'description', 'group']
+
+class TaskWithGroupSerializer(serializers.ModelSerializer):
+    group = GroupSerializer()
+    class Meta:
+        model = Task
+        fields = ['id', 'description', 'group']
