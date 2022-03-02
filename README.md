@@ -19,6 +19,7 @@ Brak
  - Django
  - Django REST framework
  - Django CORS headers
+ - mysqlclient
 ## Uruchamianie aplikacji
 **Frontend:**
 Brak
