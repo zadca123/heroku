@@ -1,40 +1,12 @@
 # Dokumentacja API
-### GET /api/task/
+## All
+### GET /
 ```json
 [
     {
         "id": 1,
-        "description": "Task #1",
-        "group": 1
-    },
-    {
-        "id": 2,
-        "description": "Task #2",
-        "group": 2
-    },
-    {
-        "id": 3,
-        "description": "Task #3",
-        "group": 2
-    },
-    {
-        "id": 4,
-        "description": "Task #5",
-        "group": 2
-    },
-    {
-        "id": 5,
-        "description": "Task #4",
-        "group": 3
-    }
-]
-```
-### GET /api/task2/
-```json
-[
-    {
-        "id": 1,
-        "description": "Task #1",
+        "title": "Task #1",
+        "description": "opis",
         "group": {
             "id": 1,
             "name": "Do zrobienia",
@@ -43,43 +15,45 @@
     },
     {
         "id": 2,
-        "description": "Task #2",
+        "title": "Task #2",
+        "description": "opis",
         "group": {
             "id": 2,
             "name": "W trakcie",
-            "limit": 2
+            "limit": 1
         }
     },
     {
         "id": 3,
-        "description": "Task #3",
+        "title": "Task #3",
+        "description": "opis",
         "group": {
-            "id": 2,
-            "name": "W trakcie",
-            "limit": 2
+            "id": 1,
+            "name": "Do zrobienia",
+            "limit": 0
         }
     },
     {
         "id": 4,
-        "description": "Task #5",
-        "group": {
-            "id": 2,
-            "name": "W trakcie",
-            "limit": 2
-        }
-    },
-    {
-        "id": 5,
-        "description": "Task #4",
+        "title": "Task #4",
+        "description": "opis",
         "group": {
             "id": 3,
-            "name": "Gotowe",
+            "name": "Zrobione",
             "limit": 0
         }
     }
 ]
 ```
-### GET /api/group/
+## Group
+### POST /group/
+```json
+{
+    "name": "Nowa grupa",
+    "limit": 0
+}
+```
+### GET /group/
 ```json
 [
     {
@@ -90,21 +64,83 @@
     {
         "id": 2,
         "name": "W trakcie",
-        "limit": 2
+        "limit": 1
     },
     {
         "id": 3,
-        "name": "Gotowe",
+        "name": "Zrobione",
         "limit": 0
     }
 ]
 ```
-## TODO
-### **GET** /api/group/<group_id>/
-### **GET** /api/task/<task_id>/
-### **PUT** /api/create/group/ **lub** /api/group/
-### **PUT** /api/create/task/ **lub** /api/task/
-### **DELETE** /api/delete/group/<groupk_id>/ **lub** /api/group/<group_id>/
-### **DELETE** /api/delete/task/<task_id>/ **lub** /api/task/<task_id>/
-### **UPDATE** /api/update/group/<group_id>/ **lub** /api/group/<group_id>/
-### **UPDATE** /api/update/group/<group_id>/ **lub** /api/group/<group_id>/
+### GET /group/{id}/
+```json
+{
+    "id": 2,
+    "name": "W trakcie",
+    "limit": 1
+}
+```
+### PUT /group/{id}/
+```json
+{
+    "name": "Nowa nazwa",
+    "limit": 0
+}
+```
+### DELETE /group/{id}/
+## Task
+### POST /task/
+```json
+{
+    "description": "Nowe zadanie",
+    "group": 1
+}
+```
+### GET /task/
+```json
+[
+    {
+        "id": 1,
+        "title": "Task #1",
+        "description": "opis",
+        "group": 1
+    },
+    {
+        "id": 2,
+        "title": "Task #2",
+        "description": "opis",
+        "group": 2
+    },
+    {
+        "id": 3,
+        "title": "Task #3",
+        "description": "opis",
+        "group": 1
+    },
+    {
+        "id": 4,
+        "title": "Task #4",
+        "description": "opis",
+        "group": 3
+    }
+]
+```
+### GET /task/{id}/
+```json
+{
+    "id": 1,
+    "title": "Task #1",
+    "description": "opis",
+    "group": 1
+}
+```
+### PUT /task/{id}/
+```json
+{
+    "title": "Nowy tytuł",
+    "description": "Nowy opis",
+    "group": 1
+}
+```
+### DELETE /task/{id}/

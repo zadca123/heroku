@@ -9,10 +9,10 @@ class GroupSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ['id', 'description', 'group']
+        fields = ['id', 'title', 'description', 'group']
 
-class TaskWithGroupSerializer(serializers.ModelSerializer):
+class AllSerializer(serializers.ModelSerializer):
     group = GroupSerializer()
     class Meta:
         model = Task
-        fields = ['id', 'description', 'group']
+        fields = ['id', 'title', 'description', 'group']
