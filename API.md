@@ -29,7 +29,7 @@
     }
 ]
 ```
-### GET /task2/
+### GET /taskExtended/
 ```json
 [
     {
@@ -115,7 +115,7 @@
     "group": 2
 }
 ```
-### GET /task2/3
+### GET /taskExtended/3
 ```json
 {
    "id": 3,
