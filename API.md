@@ -128,11 +128,6 @@
 }
 ```
 ## TODO
-### **GET** /api/group/<group_id>/
-### **GET** /api/task/<task_id>/
-### **POST** /api/create/group/ **lub** /api/group/
-### **POST** /api/create/task/ **lub** /api/task/
-### **DELETE** /api/delete/group/<group_id>/ **lub** /api/group/<group_id>/
-### **DELETE** /api/delete/task/<task_id>/ **lub** /api/task/<task_id>/
-### **UPDATE** /api/update/group/<group_id>/ **lub** /api/group/<group_id>/
-### **UPDATE** /api/update/group/<group_id>/ **lub** /api/group/<group_id>/
+### permisje
+### filtry
+### testy

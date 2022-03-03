@@ -10,6 +10,6 @@ urlpatterns = [
     path('task/', views.TaskView.as_view(), name=views.TaskView.name),
     path('task/<int:pk>', views.TaskDetailView.as_view(), name=views.TaskDetailView.name),
 
-    path('task2/', views.TaskWithGroupView.as_view(), name=views.TaskWithGroupView.name),
-    path('task2/<int:pk>', views.TaskWithGroupDetailView.as_view(), name=views.TaskWithGroupDetailView.name),
+    path('taskExpended/', views.TaskExpendedView.as_view(), name=views.TaskExpendedView.name),
+    path('taskExpended/<int:pk>', views.TaskExpendedDetailView.as_view(), name=views.TaskExpendedDetailView.name),
 ]
