@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
 from .models import Group, Task
-from .serializers import GroupSerializer, TaskSerializer, AllSerializer
+from .serializers import GroupSerializer, TaskSerializer, GroupTaskSerializer
 from django.http import HttpResponse
 
 class GroupView(generics.ListCreateAPIView):
@@ -31,6 +31,6 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
         self.perform_destroy(instance)
         return HttpResponse(status=status.HTTP_200_OK)
 
-class AllView(generics.ListAPIView):
-    queryset = Task.objects.all()
-    serializer_class = AllSerializer
+class GroupTaskView(generics.ListAPIView):
+    queryset = Group.objects.all()
+    serializer_class = GroupTaskSerializer

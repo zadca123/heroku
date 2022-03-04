@@ -11,8 +11,8 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ['id', 'title', 'description', 'group']
 
-class AllSerializer(serializers.ModelSerializer):
-    group = GroupSerializer()
+class GroupTaskSerializer(serializers.ModelSerializer):
+    task_set = TaskSerializer(many=True, read_only=True)
     class Meta:
-        model = Task
-        fields = ['id', 'title', 'description', 'group']
+        model = Group
+        fields = ['id', 'name', 'limit', 'task_set']

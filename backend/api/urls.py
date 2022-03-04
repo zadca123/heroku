@@ -6,5 +6,5 @@ urlpatterns = [
     path('group/<int:pk>/', views.GroupDetailView.as_view()),
     path('task/', views.TaskView.as_view()),
     path('task/<int:pk>/', views.TaskDetailView.as_view()),
-    path('', views.AllView.as_view())
+    path('', views.GroupTaskView.as_view())
 ]

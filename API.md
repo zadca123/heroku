@@ -1,47 +1,58 @@
 # Dokumentacja API
-## All
+## Grupy z zadaniami
 ### GET /
 ```json
 [
     {
         "id": 1,
-        "title": "Task #1",
-        "description": "opis",
-        "group": {
-            "id": 1,
-            "name": "Do zrobienia",
-            "limit": 0
-        }
+        "name": "Do zrobienia",
+        "limit": 0,
+        "task_set": [
+            {
+                "id": 1,
+                "title": "Task #1",
+                "description": "opis",
+                "group": 1
+            },
+            {
+                "id": 3,
+                "title": "Task #3",
+                "description": "opis",
+                "group": 1
+            }
+        ]
     },
     {
         "id": 2,
-        "title": "Task #2",
-        "description": "opis",
-        "group": {
-            "id": 2,
-            "name": "W trakcie",
-            "limit": 1
-        }
+        "name": "W trakcie",
+        "limit": 1,
+        "task_set": [
+            {
+                "id": 2,
+                "title": "Task #2",
+                "description": "opis",
+                "group": 2
+            }
+        ]
     },
     {
         "id": 3,
-        "title": "Task #3",
-        "description": "opis",
-        "group": {
-            "id": 1,
-            "name": "Do zrobienia",
-            "limit": 0
-        }
+        "name": "Zrobione",
+        "limit": 0,
+        "task_set": [
+            {
+                "id": 4,
+                "title": "Task #4",
+                "description": "opis",
+                "group": 3
+            }
+        ]
     },
     {
         "id": 4,
-        "title": "Task #4",
-        "description": "opis",
-        "group": {
-            "id": 3,
-            "name": "Zrobione",
-            "limit": 0
-        }
+        "name": "Test task",
+        "limit": 3,
+        "task_set": []
     }
 ]
 ```
