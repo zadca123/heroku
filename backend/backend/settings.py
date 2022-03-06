@@ -25,10 +25,16 @@ SECRET_KEY = 'django-insecure-0b1a_)*v0^9nh@um%r@4@o$uov1wsr-8fo*8pq9)5-s9*^++*u
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+# backend url
+ALLOWED_HOSTS = ['localhost','backend.m1pm.atthost24.pl']
 
 # Application definition
+
+# Dev only
+CORS_ALLOW_ALL_ORIGINS = True
+
+# frontend http://url
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000','http://frontend.m1pm.atthost24.pl']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -129,3 +137,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#python manage.py collectstatic
