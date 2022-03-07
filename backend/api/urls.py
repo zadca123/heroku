@@ -12,4 +12,6 @@ urlpatterns = [
 
     path('taskExpended/', views.TaskExpendedView.as_view(), name=views.TaskExpendedView.name),
     path('taskExpended/<int:pk>', views.TaskExpendedDetailView.as_view(), name=views.TaskExpendedDetailView.name),
+
+    path('groupTask/', views.GroupTaskView.as_view(), name=views.GroupTaskView.name),
 ]

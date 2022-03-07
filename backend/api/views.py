@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 from .models import Group, Task
-from .serializers import GroupSerializer, TaskSerializer, TaskExpendedSerializer
+from .serializers import GroupSerializer, TaskSerializer, TaskExpendedSerializer, GroupTaskSerializer
 
 
 class GroupView(generics.ListCreateAPIView):
@@ -43,6 +43,12 @@ class TaskExpendedDetailView(generics.RetrieveUpdateDestroyAPIView):
     name = 'taskExpended-detail'
 
 
+class GroupTaskView(generics.ListAPIView):
+    queryset = Group.objects.all()
+    serializer_class = GroupTaskSerializer
+    name = 'groupTasks-list'
+
+
 class ApiRoot(generics.GenericAPIView):
     name = 'api-root'
 
@@ -50,5 +56,6 @@ class ApiRoot(generics.GenericAPIView):
         return Response({
             'GroupView': reverse(GroupView.name, request=request),
             'TaskView': reverse(TaskView.name, request=request),
-            'TaskWithGroupView': reverse(TaskExpendedView.name, request=request)
+            'TaskExpendedView': reverse(TaskExpendedView.name, request=request),
+            'GroupTasksView': reverse(GroupTaskView.name, request=request)
         })
