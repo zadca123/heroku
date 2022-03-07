@@ -13,16 +13,15 @@ Co tydzień w poniedziałek jest spotkanie, na którym kontrolujemy postęp i us
 ## Wymagania
 **Frontend:**
 Brak
-
 **Backend:**
  - Python
  - Django
  - Django REST framework
  - Django CORS headers
+ - mysqlclient
 ## Uruchamianie aplikacji
 **Frontend:**
 Brak
-
 **Backend:**
 Aby uruchomić aplikację na domyślnym porcie (8000) należy w katalogu *backend* użyć polecenia:
 
