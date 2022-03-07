@@ -11,6 +11,9 @@ class GroupView(generics.ListCreateAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
     name = 'group-list'
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
 
 
 class GroupDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -23,6 +26,9 @@ class TaskView(generics.ListCreateAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     name = 'task-list'
+    filterset_fields = ['title']
+    search_fields = ['title']
+    ordering_fields = ['id', 'title', 'group']
 
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -35,6 +41,9 @@ class TaskExpendedView(generics.ListAPIView):
     queryset = Task.objects.all()
     serializer_class = TaskExpendedSerializer
     name = 'taskExpended-list'
+    filterset_fields = ['title']
+    search_fields = ['title']
+    ordering_fields = ['id', 'title', 'group']
 
 
 class TaskExpendedDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -47,6 +56,9 @@ class GroupTaskView(generics.ListAPIView):
     queryset = Group.objects.all()
     serializer_class = GroupTaskSerializer
     name = 'groupTasks-list'
+    filterset_fields = ['name']
+    search_fields = ['name']
+    ordering_fields = ['id', 'name']
 
 
 class ApiRoot(generics.GenericAPIView):
