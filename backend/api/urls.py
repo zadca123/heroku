@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+
     path('', views.ApiRoot.as_view()),
 
     path('group/', views.GroupView.as_view(), name=views.GroupView.name),
@@ -14,4 +15,5 @@ urlpatterns = [
     path('taskExpended/<int:pk>', views.TaskExpendedDetailView.as_view(), name=views.TaskExpendedDetailView.name),
 
     path('groupTask/', views.GroupTaskView.as_view(), name=views.GroupTaskView.name),
+
 ]

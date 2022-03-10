@@ -28,3 +28,4 @@ class GroupTaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['url', 'id', 'name', 'limit', 'task_set']
+
