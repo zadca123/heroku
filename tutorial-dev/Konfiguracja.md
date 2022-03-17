@@ -1,5 +1,4 @@
-# Pobieranie repozytorium
-
+# Klonowanie repozytorium
 1. Zaloguj się do aplikacji GitHub Desktop, wybierz repozytorium i kliknij Clone ...
 
 ![](images/1.png)
@@ -61,7 +60,17 @@ W takalogu frontend należy użyc polecenia:
 
     npm start
 
-# Konfiguracja - tylko przy tworzeniu repozytorium
+
+
+
+
+
+
+
+
+
+
+# Konfiguracja - tylko przy tworzeniu repozytorium (NIE UŻYWAĆ)
 
 ## Backend
 
