@@ -59,25 +59,25 @@
 
 2. Wybierz lokalizacje zapisu repozytorium
 
-![](.\images\2.png)
+![](images/2.png)
 
 3. Wybierz branch reorganizacja
 
-![](.\images\3.png)
+![](images/3.png)
 
 4. Stwórz nowy branch na podstawie brancha reorganizacja
    
-   ![](.\images\4.png)
+   ![](images/4.png)
 
 5. Tworzysz zmiany w plikach
 
 6. Zapisujesz zmiany, nadając tytuł, opis i klikasz Commit ...
 
-![](.\images\5.png)
+![](images/5.png)
 
 7. Wysyłasz zmiany na GitHub klikając Publish branch
 
-![](.\images\6.png)
+![](images/6.png)
 
 # Uruchamianie aplikacji
 
