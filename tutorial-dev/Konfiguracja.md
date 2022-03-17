@@ -55,7 +55,7 @@
 
 1. Zaloguj się do aplikacji GitHub Desktop, wybierz repozytorium i kliknij Clone ...
 
-![](.\images\1.png)
+![](images/1.png)
 
 2. Wybierz lokalizacje zapisu repozytorium
 
