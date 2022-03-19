@@ -9,6 +9,8 @@ import useApp from './useApp';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css';
 
 const Container = styled.div`
 	height: 100vh;
@@ -48,6 +50,10 @@ const DroppableGroupContainer = styled.div`
 	padding: 5px;
 	overflow-x: auto;
 `;
+
+const FormError = styled.div`
+	color: red;
+`
 
 export default function App(){
 	
@@ -110,6 +116,17 @@ export default function App(){
 	}
 
 	function AddGroupModal(){
+
+		const [taskLimitError, setTaskLimitError] = useState(false);
+
+		function onTaskLimitChange(e){
+			if(e.target.value < 0){
+				setTaskLimitError(true);
+				return;
+			}
+			setTaskLimitError(false);
+		}
+
 		return(
 			<Modal show={showAddGroupModal} onHide={closeAddGroupModal}>
 				<Modal.Header closeButton>
@@ -119,11 +136,12 @@ export default function App(){
 					<Form onSubmit={saveAddedGroup} id='form'>
 						<Form.Group className='mb-3'>
 							<Form.Label>Nazwa grupy</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe grupy'/>
+							<Form.Control type='text' placeholder='Wpisz nazwe grupy' required/>
 						</Form.Group>
 						<Form.Group className='mb-3'>
 							<Form.Label>Maksymalna liczba zadań</Form.Label>
-							<Form.Control type='number' placeholder='Wpisz liczbe zadań'/>
+							<Form.Control type='number' placeholder='Wpisz liczbe zadań' min='0' onChange={onTaskLimitChange} required/>
+							{taskLimitError ? <FormError>Podaj liczbę nieujemną</FormError> : null}
 						</Form.Group>
 					</Form>
 				</Modal.Body>
@@ -142,12 +160,12 @@ export default function App(){
 			limit: e.target[1].value,
 			position: data.length + 1
 		}).then(response => {
-			console.log('Grupa dodana');
+			NotificationManager.success('Grupa dodana', 'Grupa');
 			closeAddGroupModal();
 			loadData();
 		})
 		.catch(error => {
-			console.log('Grupa niedodana');
+			NotificationManager.success('Błąd podczas dodawania grupy', 'Błąd');
 		});
 	}
 
@@ -157,6 +175,7 @@ export default function App(){
 			limit: e.target[1].value,
 		}).then(response => {
 			loadData();
+			NotificationManager.success('Zmiany zapisane', 'Grupa');
 		});
 	}
 
@@ -172,6 +191,7 @@ export default function App(){
 			}
 			setData(newData);
 			saveGroupPosition(newData);
+			NotificationManager.success('Grupa usunięta', 'Grupa');
         });
 	}
 
@@ -181,6 +201,7 @@ export default function App(){
 			description: e.target[1].value,
 		}).then(response => {
 			loadData();
+			NotificationManager.success('Zmiany zapisane', 'Zadanie');
 		});
 	}
 
@@ -194,8 +215,8 @@ export default function App(){
 	}
 
 	function saveDeletedTask(t){
-		console.log(t);
 		axios.delete('http://localhost:8000/task/' + t.id + '/').then(response => {
+			NotificationManager.success('Zadanie usunięte', 'Zadanie');
 			loadData();
         });
 	}
@@ -207,11 +228,11 @@ export default function App(){
 			group: g.id,
 			position: g.task_set.length + 1
 		}).then(response => {
-			console.log('Zadanie dodane');
+			NotificationManager.success('Zadanie dodane', 'Zadanie');
 			loadData();
 		})
 		.catch(error => {
-			console.log('Zadanie niedodane');
+			NotificationManager.error('Błąd podczas dodawania zadania', 'Błąd');
 		});
 	}
 
@@ -235,15 +256,14 @@ export default function App(){
 			if(source.droppableId === destination.droppableId && source.index === destination.index) return;
 			if(source.droppableId === destination.droppableId){
 				const temp = data.slice();
-				const task_temp = data[0].task_set.slice();
-				const removed = task_temp.splice(source.index - 1, 1);
-				task_temp.splice(destination.index - 1, 0, removed[0]);
-				for(let i = 0; i < task_temp.length; i++){
-					task_temp[i].position = i + 1;
+				const item = temp[source.droppableId - 1].task_set.splice(source.index - 1, 1);
+				temp[source.droppableId - 1].task_set.splice(destination.index - 1, 0, item[0]);
+				
+				for(let i = 0; i < temp[source.droppableId - 1].task_set.length; i++){
+					temp[source.droppableId - 1].task_set[i].position = i + 1;
 				}
-				temp[0].task_set = task_temp;
 				setData(temp);
-				saveTaskPosition(task_temp);
+				saveTaskPosition(temp[source.droppableId - 1].task_set);
 				return;
 			}
 			const temp = data.slice();
@@ -282,6 +302,7 @@ export default function App(){
 					)}
 				</Droppable>
 			</DragDropContext>
+			<NotificationContainer/>
 		</Container>
 	);
 }

@@ -63,11 +63,11 @@ export default function TaskComponent(props){
 							<Form onSubmit={saveEditedTask} id='form'>
 								<Form.Group className='mb-3'>
 									<Form.Label>Tytuł zadania</Form.Label>
-									<Form.Control type='text' defaultValue={t.title}/>
+									<Form.Control type='text' defaultValue={t.title} required/>
 								</Form.Group>
 								<Form.Group className='mb-3'>
 									<Form.Label>Opis zadania</Form.Label>
-									<Form.Control type='text' defaultValue={t.description}/>
+									<Form.Control type='text' defaultValue={t.description} required/>
 								</Form.Group>
 							</Form>
 						</Modal.Body>

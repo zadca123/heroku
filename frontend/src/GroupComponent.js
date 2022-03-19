@@ -147,11 +147,11 @@ export default function GroupComponent(props){
 							<Form onSubmit={saveEditedGroup} id='form'>
 								<Form.Group className='mb-3'>
 									<Form.Label>Nazwa grupy</Form.Label>
-									<Form.Control type='text' defaultValue={g.name}/>
+									<Form.Control type='text' defaultValue={g.name} required/>
 								</Form.Group>
 								<Form.Group className='mb-3'>
 									<Form.Label>Maksymalna liczba zadań</Form.Label>
-									<Form.Control type='number' defaultValue={g.limit}/>
+									<Form.Control type='number' defaultValue={g.limit} min='0' required/>
 								</Form.Group>
 							</Form>
 						</Modal.Body>
@@ -167,11 +167,11 @@ export default function GroupComponent(props){
 							<Form onSubmit={saveAddedTask} id='form'>
 								<Form.Group className='mb-3'>
 									<Form.Label>Tytuł zadania</Form.Label>
-									<Form.Control type='text' placeholder='Wpisz tytuł zadania'/>
+									<Form.Control type='text' placeholder='Wpisz tytuł zadania' required/>
 								</Form.Group>
 								<Form.Group className='mb-3'>
 									<Form.Label>Opis zadania</Form.Label>
-									<Form.Control type='text' placeholder='Wpisz opis zadania'/>
+									<Form.Control type='text' placeholder='Wpisz opis zadania' required/>
 								</Form.Group>
 							</Form>
 						</Modal.Body>
