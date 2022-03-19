@@ -98,37 +98,6 @@ export default function useApp(){
         });
 	}
 
-    /* NOT WORKING */
-    const [showNotification, setShowNotification] = useState(false);
-	const openNotification = () => {
-        setNotification({
-            show: true,
-            title: notification.title,
-            message: notification.message
-        });
-    }
-	const closeNotification = () => {
-        setNotification({
-            show: false,
-            title: notification.title,
-            message: notification.message
-        });
-    }
-    const [notification, setNotification] = useState({
-        show: false,
-        title: 'Powiadomienie',
-        message: ''
-    });
-    const setNotificationMessage = (message) => {
-        const aaa = {
-            show: notification.show,
-            title: notification.title,
-            message: message
-        };
-        setNotification(n => ({...n, aaa}));
-    }
-    // END
-
     return{
         json,
         onCreateGroup,
@@ -140,7 +109,5 @@ export default function useApp(){
         onCreateTask,
         onEditTask,
         onDeleteTask,
-        notification,
-        closeNotification
     }
 }
