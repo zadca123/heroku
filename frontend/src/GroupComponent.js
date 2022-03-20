@@ -121,14 +121,14 @@ export default function GroupComponent(props){
 	}
 
 	return(
-		<Draggable draggableId={g.id + ''} index={g.position} key={g.id}>
+		<Draggable draggableId={'group-drag-' + g.id} index={g.position} key={g.id}>
 			{provider => (
 				<Group {...provider.draggableProps} ref={provider.innerRef} className={g.limit > 0 && g.task_set.length > g.limit ? 'overLimit' : ''}>
 					<div className='header' {...provider.dragHandleProps} onClick={openEditGroupModal}>
 						<div className='title'>{g.name}</div>
 						<div className='subtitle'>{g.limit === 0 ? '∞' : g.limit}</div>
 					</div>
-					<Droppable droppableId={g.position + ''} type='task'>
+					<Droppable droppableId={'task-drop-' + g.position} type='task'>
 						{provider => (
 							<div className='taskList' {...provider.droppableProps} ref={provider.innerRef}>
 								{g.task_set.map((t) => (

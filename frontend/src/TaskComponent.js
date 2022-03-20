@@ -52,7 +52,7 @@ export default function TaskComponent(props){
 	}
 
 	return(
-		<Draggable draggableId={t.id + ''} index={t.position} key={t.id}>
+		<Draggable draggableId={'task-drag-' + t.id} index={t.position} key={t.id}>
 			{provider => (
 				<Task {...provider.draggableProps} ref={provider.innerRef} {...provider.dragHandleProps}>
 					<div className='title' onClick={openEditTaskModal}>{t.title}</div>

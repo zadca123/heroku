@@ -238,9 +238,9 @@ export default function App(){
 
 	function onDragEnd(e){
 		const { type, source, destination } = e;
+		if(!destination) return;
+		if(source.droppableId === destination.droppableId && source.index === destination.index) return;
 		if(type === 'group'){
-			if(!destination) return;
-			if(source.droppableId === destination.droppableId && source.index === destination.index) return;
 			if(source.droppableId !== destination.droppableId) return;
 			const temp = data.slice();
 			const removed = temp.splice(source.index - 1, 1);
@@ -253,32 +253,31 @@ export default function App(){
 			return;
 		}
 		if(type === 'task'){
-			if(source.droppableId === destination.droppableId && source.index === destination.index) return;
 			if(source.droppableId === destination.droppableId){
 				const temp = data.slice();
-				const item = temp[source.droppableId - 1].task_set.splice(source.index - 1, 1);
-				temp[source.droppableId - 1].task_set.splice(destination.index - 1, 0, item[0]);
+				const item = temp[source.droppableId.split('-')[2] - 1].task_set.splice(source.index - 1, 1);
+				temp[source.droppableId.split('-')[2] - 1].task_set.splice(destination.index - 1, 0, item[0]);
 				
-				for(let i = 0; i < temp[source.droppableId - 1].task_set.length; i++){
-					temp[source.droppableId - 1].task_set[i].position = i + 1;
+				for(let i = 0; i < temp[source.droppableId.split('-')[2] - 1].task_set.length; i++){
+					temp[source.droppableId.split('-')[2] - 1].task_set[i].position = i + 1;
 				}
 				setData(temp);
-				saveTaskPosition(temp[source.droppableId - 1].task_set);
+				saveTaskPosition(temp[source.droppableId.split('-')[2] - 1].task_set);
 				return;
 			}
 			const temp = data.slice();
-			const item = temp[source.droppableId - 1].task_set.splice(source.index - 1, 1);
-			item[0].group = temp[destination.droppableId - 1].id;
-			temp[destination.droppableId - 1].task_set.splice(destination.index - 1, 0, item[0]);
-			for(let i = 0; i < temp[source.droppableId - 1].task_set.length; i++){
-				temp[source.droppableId - 1].task_set[i].position = i + 1;
+			const item = temp[source.droppableId.split('-')[2] - 1].task_set.splice(source.index - 1, 1);
+			item[0].group = temp[destination.droppableId.split('-')[2] - 1].id;
+			temp[destination.droppableId.split('-')[2] - 1].task_set.splice(destination.index - 1, 0, item[0]);
+			for(let i = 0; i < temp[source.droppableId.split('-')[2] - 1].task_set.length; i++){
+				temp[source.droppableId.split('-')[2] - 1].task_set[i].position = i + 1;
 			}
-			for(let i = 0; i < temp[destination.droppableId - 1].task_set.length; i++){
-				temp[destination.droppableId - 1].task_set[i].position = i + 1;
+			for(let i = 0; i < temp[destination.droppableId.split('-')[2] - 1].task_set.length; i++){
+				temp[destination.droppableId.split('-')[2] - 1].task_set[i].position = i + 1;
 			}
 			setData(temp);
-			saveTaskPosition(temp[source.droppableId - 1].task_set);
-			saveTaskPosition(temp[destination.droppableId - 1].task_set);
+			saveTaskPosition(temp[source.droppableId.split('-')[2] - 1].task_set);
+			saveTaskPosition(temp[destination.droppableId.split('-')[2] - 1].task_set);
 		}
 	}
 
@@ -291,7 +290,7 @@ export default function App(){
 				<AddGroupModal/>
 			</Header>
 			<DragDropContext onDragEnd={onDragEnd}>
-				<Droppable droppableId='droppableGroups' direction='horizontal' type='group'>
+				<Droppable droppableId='group-drop' direction='horizontal' type='group'>
 					{provider => (
 						<DroppableGroupContainer {...provider.droppableProps} ref={provider.innerRef}>
 							{data.map(g => (
