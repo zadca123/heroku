@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-teb=v8-87t4htex9&&dibor$uctne=c+ro71s+c)qet8)^&%0x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['kanbanapi.jrk.atthost24.pl']
+ALLOWED_HOSTS = ['kanbanapi.jrk.atthost24.pl','localhost']
 
 ##################### DEV ONLY
 CORS_ALLOW_ALL_ORIGINS = True
@@ -97,7 +97,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': '22470_kanban',
-        'HOST': 'localhost',
+        'HOST': 'jrk.atthost24.pl',
         'USER': '22470_kanban',
         'PASSWORD': 'Vs0GlyUR5a7Yb',
         'OPTIONS': {
