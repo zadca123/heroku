@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-teb=v8-87t4htex9&&dibor$uctne=c+ro71s+c)qet8)^&%0x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['kanbanapi.jrk.atthost24.pl']
 
 ##################### DEV ONLY
 CORS_ALLOW_ALL_ORIGINS = True
@@ -96,10 +96,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'procode',
+        'NAME': '22470_kanban',
         'HOST': 'localhost',
-        'USER': 'root',
-        'PASSWORD': '',
+        'USER': '22470_kanban',
+        'PASSWORD': 'Vs0GlyUR5a7Yb',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }

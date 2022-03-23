@@ -80,7 +80,7 @@ export default function App(){
 	const [data, setData] = useState([]);
 
 	function loadData(){
-		axios.get('http://localhost:8000/').then(response => {
+		axios.get('http://kanbanapi.jrk.atthost24.pl/').then(response => {
 			setData(response.data);
 		});
 	}
@@ -88,14 +88,14 @@ export default function App(){
 	function saveGroupPosition(newData){
 		if(newData){
 			newData.map(g => {
-				axios.patch('http://localhost:8000/group/' + g.id + '/', {
+				axios.patch('http://kanbanapi.jrk.atthost24.pl/group/' + g.id + '/', {
 					position: g.position
 				});
 			});
 			return;
 		}
 		data.map(g => {
-			axios.patch('http://localhost:8000/group/' + g.id + '/', {
+			axios.patch('http://kanbanapi.jrk.atthost24.pl/group/' + g.id + '/', {
 				position: g.position
 			});
 		});
@@ -155,7 +155,7 @@ export default function App(){
 
 	function saveAddedGroup(e){
 		e.preventDefault();
-		axios.post('http://localhost:8000/group/', {
+		axios.post('http://kanbanapi.jrk.atthost24.pl/group/', {
 			name: e.target[0].value,
 			limit: e.target[1].value,
 			position: data.length + 1
@@ -170,7 +170,7 @@ export default function App(){
 	}
 
 	function saveEditedGroup(e, g){
-		axios.patch('http://localhost:8000/group/' + g.id + '/', {
+		axios.patch('http://kanbanapi.jrk.atthost24.pl/group/' + g.id + '/', {
 			name: e.target[0].value,
 			limit: e.target[1].value,
 		}).then(response => {
@@ -180,7 +180,7 @@ export default function App(){
 	}
 
 	function saveDeletedGroup(g){
-		axios.delete('http://localhost:8000/group/' + g.id + '/').then(response => {
+		axios.delete('http://kanbanapi.jrk.atthost24.pl/group/' + g.id + '/').then(response => {
 			const newData = [];
 			for(let i = 0; i < data.length; i++){
 				if(data[i].id === g.id) continue;
@@ -196,7 +196,7 @@ export default function App(){
 	}
 
 	function saveEditedTask(e, t){
-		axios.patch('http://localhost:8000/task/' + t.id + '/', {
+		axios.patch('http://kanbanapi.jrk.atthost24.pl/task/' + t.id + '/', {
 			title: e.target[0].value,
 			description: e.target[1].value,
 		}).then(response => {
@@ -207,7 +207,7 @@ export default function App(){
 
 	function saveTaskPosition(newData){
 		newData.map(t => {
-			axios.patch('http://localhost:8000/task/' + t.id + '/', {
+			axios.patch('http://kanbanapi.jrk.atthost24.pl/task/' + t.id + '/', {
 				group: t.group,
 				position: t.position
 			});
@@ -215,14 +215,14 @@ export default function App(){
 	}
 
 	function saveDeletedTask(t){
-		axios.delete('http://localhost:8000/task/' + t.id + '/').then(response => {
+		axios.delete('http://kanbanapi.jrk.atthost24.pl/task/' + t.id + '/').then(response => {
 			NotificationManager.success('Zadanie usunięte', 'Zadanie');
 			loadData();
         });
 	}
 
 	function saveAddedTask(e, g){
-		axios.post('http://localhost:8000/task/', {
+		axios.post('http://kanbanapi.jrk.atthost24.pl/task/', {
 			title: e.target[0].value,
 			description: e.target[1].value,
 			group: g.id,

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default function useApp(){
     const update = () => {
-		axios.get('http://localhost:8000/').then(response => {
+		axios.get('http://kanbanapi.jrk.atthost24.pl/').then(response => {
 			setJson(response.data);
 		});
 	}
@@ -16,7 +16,7 @@ export default function useApp(){
 
 	function onCreateGroup(e){
 		e.preventDefault();
-		axios.post('http://localhost:8000/group/', {
+		axios.post('http://kanbanapi.jrk.atthost24.pl/group/', {
 			name: e.target[0].value,
 			limit: e.target[1].value
 		}).then(response => {
@@ -30,7 +30,7 @@ export default function useApp(){
 	}
 
 	const onEditGroup = (id, name, limit, close) => {
-		axios.put('http://localhost:8000/group/' + id + '/', {
+		axios.put('http://kanbanapi.jrk.atthost24.pl/group/' + id + '/', {
 			name: name,
 			limit: limit
 		}).then(response => {
@@ -44,7 +44,7 @@ export default function useApp(){
 	}
 
 	function onDeleteGroup(id, close){
-		axios.delete('http://localhost:8000/group/' + id + '/').then(response => {
+		axios.delete('http://kanbanapi.jrk.atthost24.pl/group/' + id + '/').then(response => {
 			console.log('Grupa została usunięta.');
 			close();
 			update();
@@ -59,7 +59,7 @@ export default function useApp(){
 	const closeCreateGroupModal = () => setShowCreateGroupModal(false);
 
 	const onCreateTask = (e, g) => {
-		axios.post('http://localhost:8000/task/', {
+		axios.post('http://kanbanapi.jrk.atthost24.pl/task/', {
 			title: e.target[0].value,
 			description: e.target[1].value,
 			group: g.id
@@ -73,7 +73,7 @@ export default function useApp(){
 	}
 
 	const onEditTask = (t, e) => {
-		axios.put('http://localhost:8000/task/' + t.id + '/', {
+		axios.put('http://kanbanapi.jrk.atthost24.pl/task/' + t.id + '/', {
 			title: e.target[0].value,
 			description: e.target[1].value,
 			group: t.group,
@@ -89,7 +89,7 @@ export default function useApp(){
 	}
 
 	function onDeleteTask(id){
-		axios.delete('http://localhost:8000/task/' + id + '/').then(response => {
+		axios.delete('http://kanbanapi.jrk.atthost24.pl/task/' + id + '/').then(response => {
 			console.log('Zadanie usunięte.');
 			update();
         })
