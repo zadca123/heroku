@@ -14,6 +14,7 @@ import 'react-notifications/lib/notifications.css';
 
 const Container = styled.div`
 	height: 100vh;
+	background: #DFDFDF;
 `;
 
 const Header = styled.div`
@@ -165,7 +166,7 @@ export default function App(){
 			loadData();
 		})
 		.catch(error => {
-			NotificationManager.success('Błąd podczas dodawania grupy', 'Błąd');
+			NotificationManager.error('Błąd podczas dodawania grupy', 'Błąd');
 		});
 	}
 

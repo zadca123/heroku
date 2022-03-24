@@ -7,17 +7,19 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState } from 'react';
 
 const Task = styled.div`
-	background: #FFFFFF;
-	border-radius: 4px;
-	padding: 8px;
-	margin: 8px;
-	font-size: 14px;
-	cursor: pointer;
-	border: 2px solid #FFFFFF;
-	
-	&:hover{
-		border: 2px solid #000000;
-		background: #EFEFEF;
+	.task2{
+		background: #FFFFFF;
+		border-radius: 4px;
+		padding: 8px;
+		margin: 8px;
+		font-size: 14px;
+		cursor: pointer;
+		border: 2px solid #FFFFFF;
+		
+		&:hover{
+			border: 2px solid #000000;
+			background: #EFEFEF;
+		}
 	}
 
 	.title{
@@ -55,8 +57,10 @@ export default function TaskComponent(props){
 		<Draggable draggableId={'task-drag-' + t.id} index={t.position} key={t.id}>
 			{provider => (
 				<Task {...provider.draggableProps} ref={provider.innerRef} {...provider.dragHandleProps}>
-					<div className='title' onClick={openEditTaskModal}>{t.title}</div>
-					<div className='description'>{t.description}</div>
+					<div className='task2' onClick={openEditTaskModal}>
+						<div className='title'>{t.title}</div>
+						<div className='description'>{t.description}</div>
+					</div>
 					<Modal show={showEditTaskModal} onHide={closeEditTaskModal}>
 						<Modal.Header closeButton><Modal.Title>Edycja zadania</Modal.Title></Modal.Header>
 						<Modal.Body>
