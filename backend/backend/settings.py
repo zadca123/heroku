@@ -96,10 +96,14 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '22470_kanban',
-        'HOST': 'jrk.atthost24.pl',
-        'USER': '22470_kanban',
-        'PASSWORD': 'Vs0GlyUR5a7Yb',
+        #'NAME': '22470_kanban',
+        #'HOST': 'jrk.atthost24.pl',
+        #'USER': '22470_kanban',
+        #'PASSWORD': 'Vs0GlyUR5a7Yb',
+        'NAME': 'procode',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD': '',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
