@@ -10,4 +10,8 @@ urlpatterns = [
     path('task/<int:pk>/', views.TaskDetailView.as_view()),
     path('limit/', views.LimitView.as_view()),
     path('limit/<int:pk>/', views.LimitDetailView.as_view()),
+    path('user/', views.UserView.as_view()),
+    path('user/<int:pk>/', views.UserDetailView.as_view()),
+    path('taskUser/', views.TaskUserView.as_view()),
+    path('taskUser/<int:pk>/', views.TaskUserDetailView.as_view()),
 ]

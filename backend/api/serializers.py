@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Column, Row, Task, Limit
+from .models import Column, Row, Task, Limit, User, TaskUser
 
 class ColumnSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,6 +20,16 @@ class LimitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Limit
         fields = ['id', 'limit', 'column', 'row']
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'name']
+
+class TaskUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskUser
+        fields = ['id', 'task', 'user']
 
 '''
 class GroupTaskSerializer(serializers.ModelSerializer):

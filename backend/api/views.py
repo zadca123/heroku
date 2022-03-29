@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics, status
-from .models import Column, Row, Task, Limit
-from .serializers import ColumnSerializer, RowSerializer, TaskSerializer, LimitSerializer
+from .models import Column, Row, Task, Limit, User, TaskUser
+from .serializers import ColumnSerializer, RowSerializer, TaskSerializer, LimitSerializer, UserSerializer, TaskUserSerializer
 from django.http import HttpResponse
 
 class ColumnView(generics.ListCreateAPIView):
@@ -37,6 +37,22 @@ class LimitDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Limit.objects.all()
     serializer_class = LimitSerializer
 
+
+class UserView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class TaskUserView(generics.ListCreateAPIView):
+    queryset = TaskUser.objects.all()
+    serializer_class = TaskUserSerializer
+
+class TaskUserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TaskUser.objects.all()
+    serializer_class = TaskUserSerializer
 
 '''
 class GroupTaskView(generics.ListAPIView):

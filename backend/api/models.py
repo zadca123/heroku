@@ -28,7 +28,6 @@ class Task(models.Model):
     position = models.IntegerField(default=0)
     column = models.ForeignKey(Column, on_delete=models.CASCADE)
     row = models.ForeignKey(Row, on_delete=models.CASCADE)
-    
 
     def __str__(self):
         return self.name
@@ -43,3 +42,16 @@ class Limit(models.Model):
 
     def __str__(self):
         return 'Column ' + self.column.name + ', Row ' + self.row.name + ', Limit ' + str(self.limit)
+
+class User(models.Model):
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
+
+class TaskUser(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.task.name + ' (' + self.user.name + ')'

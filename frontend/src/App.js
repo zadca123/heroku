@@ -189,9 +189,35 @@ const Task = styled.div`
 	}
 
 	.description{}
+
+	.users{
+		text-align: center;
+	}
+
+	.user{
+		width: 22px;
+		height: 22px;
+		border-radius: 11px;
+		text-align: center;
+		line-height: 22px;
+		color: #FFFFFF;
+		margin: 2px;
+		display: inline-block;
+		padding: 2px;
+		box-sizing: content-box;
+	}
 `;
 
 const CellContainer = styled.div``;
+
+function getRandomColor(){
+	let letters = '0123456789ABCDEF'.split('');
+	let color = '#';
+	for(let i = 0; i < 6; i++){
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
+}
 
 export default function App(){
 
@@ -206,12 +232,47 @@ export default function App(){
 		loadRowList();
 		loadTaskList();
 		loadLimitList();
+		loadUserList();
+		loadTaskUserList();
+		/*
+		setUsers([
+			{
+				id: 1,
+				name: 'u1@user.com'
+			},
+			{
+				id: 2,
+				name: 'u2@user.com'
+			},{
+				id: 3,
+				name: 'u3@user.com'
+			}
+		]);
+		setTaskUser([
+			{
+				id: 1,
+				task: 19,
+				user: 1
+			},
+			{
+				id: 2,
+				task: 19,
+				user: 2
+			},{
+				id: 3,
+				task: 17,
+				user: 3
+			}
+		]);
+		*/
 	}, []);
 
 	const [columns, setColumns] = useState([]);
 	const [rows, setRows] = useState([]);
 	const [tasks, setTasks] = useState([]);
 	const [limits, setLimits] = useState([]);
+	const [users, setUsers] = useState([]);
+	const [taskUser, setTaskUser] = useState([]);
 
 	/*#####################################################################
 	#                           DODAWANIE KOLUMNY                         #
@@ -451,6 +512,18 @@ export default function App(){
 	function loadLimitList(){
 		axios.get(config.API_URL + 'limit').then(response => {
 			setLimits(response.data);
+		});
+	}
+
+	function loadUserList(){
+		axios.get(config.API_URL + 'user').then(response => {
+			setUsers(response.data);
+		});
+	}
+
+	function loadTaskUserList(){
+		axios.get(config.API_URL + 'taskUser').then(response => {
+			setTaskUser(response.data);
 		});
 	}
 
@@ -741,6 +814,22 @@ export default function App(){
 			});
 		}
 
+		function isUserChecked(e, data){
+			if(e.target.checked){
+				axios.post(config.API_URL + 'taskUser/', {
+					task: data.task,
+					user: data.user
+				}).then(response => {
+					loadTaskUserList();
+				});
+			}
+			else{
+				axios.delete(config.API_URL + 'taskUser/' + data.id + '/').then(response => {
+					loadTaskUserList();
+				});
+			}
+		}
+
 		return(
 			<Modal show={showEditTaskModal} onHide={closeEditTaskModal}>
 				<Modal.Header closeButton>
@@ -755,6 +844,12 @@ export default function App(){
 						<Form.Group className='mb-3'>
 							<Form.Label>Opis zadania</Form.Label>
 							<Form.Control type='text' defaultValue={!editTaskModal || tasks.filter(t => t.id === editTaskModal).length === 0 ? '' : tasks.filter(t => t.id === editTaskModal)[0].description} onChange={(e) => setDescription(e.target.value)}/>
+						</Form.Group>
+						<Form.Group className='mb-3'>
+							<Form.Label>Przypisani użytkownicy</Form.Label>
+							{users.map(u => (
+								taskUser.filter(tu => tu.task === editTaskModal && tu.user === u.id).length === 0 ? <Form.Check type='checkbox' label={u.name} onClick={(e) => isUserChecked(e, {task: editTaskModal, user: u.id})} key={u.id}/> : <Form.Check type='checkbox' label={u.name} defaultChecked onClick={(e) => isUserChecked(e, {id: taskUser.filter(tu => tu.task === editTaskModal && tu.user === u.id)[0].id, task: editTaskModal, user: u.id})} key={u.id}/>
+							))}
 						</Form.Group>
 					</Form>
 				</Modal.Body>
@@ -990,6 +1085,15 @@ export default function App(){
 																	<div className='container' onClick={() => {setEditTaskModal(t.id);openEditTaskModal();}}>
 																		<div className='title'>{t.name}</div>
 																		<div className='description'>{t.description}</div>
+																		<div className='users'>
+																			{taskUser.filter(tu => tu.task === t.id).map(tu =>
+																				users.filter(u => u.id === tu.user).map(u =>
+																					<div className='user' key={u.id} style={{background: getRandomColor()}}>
+																						{u.name.split('')[0] + u.name.split('')[1]}
+																					</div>
+																				)
+																			)}
+																		</div>
 																	</div>
 																</Task>
 															)}
