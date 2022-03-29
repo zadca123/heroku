@@ -11,6 +11,10 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import config from './config.json';
 
+//import { io } from 'socket.io-client';
+
+//const socket = io(config.SOCKET_SERVER_URL);
+
 const Container = styled.div`
 	height: 100vh;
 `;
@@ -190,6 +194,12 @@ const Task = styled.div`
 const CellContainer = styled.div``;
 
 export default function App(){
+
+	/*
+	socket.on('c', (arg) => {
+		console.log('c');
+	});
+	*/
 
 	useEffect(() => {
 		loadColumnList();
@@ -675,16 +685,12 @@ export default function App(){
 
 	function EditTaskModal(){
 
-		const [name, setName] = useState();
-		const [description, setDescription] = useState('');
+		const [name, setName] = useState(tasks.filter(t => t.id === editTaskModal).length === 0 ? null : tasks.filter(t => t.id === editTaskModal)[0].name);
+		const [description, setDescription] = useState(tasks.filter(t => t.id === editTaskModal).length === 0 ? null : tasks.filter(t => t.id === editTaskModal)[0].description);
 
 		function editTask(){
 			if(!name || name.length < 1){
 				NotificationManager.error('Niepoprawna nazwa zadania', 'Błąd');
-				return;
-			}
-			if(!description || description.length < 1){
-				NotificationManager.error('Niepoprawny opis zadania', 'Błąd');
 				return;
 			}
 			axios.patch(config.API_URL + 'task/' + editTaskModal + '/', {
