@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Modal from 'react-bootstrap/Modal';
-import { Form, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -10,6 +9,13 @@ import axios from 'axios';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import 'react-notifications/lib/notifications.css';
 import config from './config.json';
+import AddColumnForm from './components/column/AddColumnForm';
+import EditColumnForm from './components/column/EditColumnForm';
+import AddRowForm from './components/row/AddRowForm';
+import EditRowForm from './components/row/EditRowForm';
+import EditCellForm from './components/cell/EditCellForm';
+import AddTaskForm from './components/task/AddTaskForm';
+import EditTaskForm from './components/task/EditTaskForm';
 
 //import { io } from 'socket.io-client';
 
@@ -65,27 +71,28 @@ const Column = styled.div`
 	background: ${props => props.isDragging ? '#F06F32' : '#fd9e02'};
 	text-align: center;
 	cursor: pointer;
-	height: 62px;
 	padding: 10px;
 	border-radius: 4px;
 	min-width: 224px;
 	padding: 6px;
 	margin: 6px;
 	box-sizing: content-box;
-	line-height: 62px;
+	display: flex;
+	flex-direction: column;
 
 	&:hover{
 		background: #F06F32;
 	}
 
 	.name{
-		color: #000000;
 		font-weight: 700;
 	}
 
 	.limit{
-		color: #FFFFFF;
-		font-weight: 700;
+	}
+
+	&.overLimit{
+		background: #FF6E6E;
 	}
 `;
 
@@ -124,13 +131,20 @@ const Row = styled.div`
 	padding: 6px;
 	margin: 6px;
 	height: 300px;
-	font-weight: 700;
 	border-radius: 4px;
 	background: ${props => props.isDragging ? '#F06F32' : '#fd9e02'};
 	box-sizing: content-box;
 
 	&:hover{
 		background: #F06F32;
+	}
+
+	.name{
+		font-weight: 700;
+	}
+
+	&.overLimit{
+		background: #FF6E6E;
 	}
 `;
 
@@ -205,19 +219,11 @@ const Task = styled.div`
 		display: inline-block;
 		padding: 2px;
 		box-sizing: content-box;
+		background: #4D96FF;
 	}
 `;
 
 const CellContainer = styled.div``;
-
-function getRandomColor(){
-	let letters = '0123456789ABCDEF'.split('');
-	let color = '#';
-	for(let i = 0; i < 6; i++){
-		color += letters[Math.floor(Math.random() * 16)];
-	}
-	return color;
-}
 
 export default function App(){
 
@@ -234,37 +240,6 @@ export default function App(){
 		loadLimitList();
 		loadUserList();
 		loadTaskUserList();
-		/*
-		setUsers([
-			{
-				id: 1,
-				name: 'u1@user.com'
-			},
-			{
-				id: 2,
-				name: 'u2@user.com'
-			},{
-				id: 3,
-				name: 'u3@user.com'
-			}
-		]);
-		setTaskUser([
-			{
-				id: 1,
-				task: 19,
-				user: 1
-			},
-			{
-				id: 2,
-				task: 19,
-				user: 2
-			},{
-				id: 3,
-				task: 17,
-				user: 3
-			}
-		]);
-		*/
 	}, []);
 
 	const [columns, setColumns] = useState([]);
@@ -273,6 +248,10 @@ export default function App(){
 	const [limits, setLimits] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [taskUser, setTaskUser] = useState([]);
+
+	const [selectedColumn, setSelectedColumn] = useState();
+	const [selectedRow, setSelectedRow] = useState();
+	const [selectedTask, setSelectedTask] = useState();
 
 	/*#####################################################################
 	#                           DODAWANIE KOLUMNY                         #
@@ -284,64 +263,26 @@ export default function App(){
 
 	function AddColumnModal(){
 
-		/*
-		const [taskLimitError, setTaskLimitError] = useState(false);
-
-		function onTaskLimitChange(e){
-			if(e.target.value < 0){
-				setTaskLimitError(true);
-				return;
-			}
-			setTaskLimitError(false);
-		}
-		*/
-
-		function addColumn(e){
-			e.preventDefault();
-			axios.post(config.API_URL + 'column/', {
-				name: e.target[0].value,
-				position: columns.length
-			}).then(response => {
-				NotificationManager.success('Kolumna została dodana', 'Powiadomienie');
-				closeAddColumnModal();
-				loadColumnList();
-				rows.map(r => (
-					axios.post(config.API_URL + 'limit/', {
-						limit: 0,
-						column: response.data.id,
-						row: r.id
-					})
-				));
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas dodawania kolumny', 'Błąd');
-			});
-		}
-
 		return(
 			<Modal show={showAddColumnModal} onHide={closeAddColumnModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Tworzenie kolumny</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form onSubmit={addColumn} id='form'>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa kolumny</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe kolumny' required/>
-						</Form.Group>
-						{/*
-						<Form.Group className='mb-3'>
-							<Form.Label>Maksymalna liczba zadań</Form.Label>
-							<Form.Control type='number' placeholder='Wpisz liczbe zadań' min='0' onChange={onTaskLimitChange} required/>
-							{taskLimitError ? <FormError>Podaj liczbę nieujemną</FormError> : null}
-						</Form.Group>
-						*/}
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeAddColumnModal}>Zamknij</Button>
-					<Button variant='primary' type='submit' form='form'>Zapisz</Button>
-				</Modal.Footer>
+				<AddColumnForm onClose={closeAddColumnModal} onSave={loadColumnList}/>
+			</Modal>
+		)
+	}
+
+	/*#####################################################################
+	#                          EDYTOWANIE KOLUMNY                         #
+	#####################################################################*/
+
+	const [showEditColumnModal, setShowEditColumnModal] = useState(false);
+	const openEditColumnModal = () => setShowEditColumnModal(true);
+	const closeEditColumnModal = () => setShowEditColumnModal(false);
+
+	function EditColumnModal(){
+
+		return(
+			<Modal show={showEditColumnModal} onHide={closeEditColumnModal}>
+				<EditColumnForm column={selectedColumn} onClose={closeEditColumnModal} onSave={loadColumnList}/>
 			</Modal>
 		)
 	}
@@ -356,46 +297,26 @@ export default function App(){
 
 	function AddRowModal(){
 
-		function addRow(e){
-			e.preventDefault();
-			axios.post(config.API_URL + 'row/', {
-				name: e.target[0].value,
-				position: rows.length
-			}).then(response => {
-				NotificationManager.success('Wiersz został dodany', 'Powiadomienie');
-				closeAddRowModal();
-				loadRowList();
-				columns.map(c => (
-					axios.post(config.API_URL + 'limit/', {
-						limit: 0,
-						column: c.id,
-						row: response.data.id
-					})
-				));
-				loadLimitList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas dodawania wiersza', 'Błąd');
-			});
-		}
-
 		return(
 			<Modal show={showAddRowModal} onHide={closeAddRowModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Tworzenie wiersza</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form onSubmit={addRow} id='form'>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa wiersza</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe wiersza' required/>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeAddRowModal}>Zamknij</Button>
-					<Button variant='primary' type='submit' form='form'>Zapisz</Button>
-				</Modal.Footer>
+				<AddRowForm onClose={closeAddRowModal} onSave={loadRowList}/>
+			</Modal>
+		)
+	}
+
+	/*#####################################################################
+	#                          EDYTOWANIE WIERSZA                         #
+	#####################################################################*/
+
+	const [showEditRowModal, setShowEditRowModal] = useState(false);
+	const openEditRowModal = () => setShowEditRowModal(true);
+	const closeEditRowModal = () => setShowEditRowModal(false);
+
+	function EditRowModal(){
+
+		return(
+			<Modal show={showEditRowModal} onHide={closeEditRowModal}>
+				<EditRowForm row={selectedRow} onClose={closeEditRowModal} onSave={loadRowList}/>
 			</Modal>
 		)
 	}
@@ -410,79 +331,9 @@ export default function App(){
 
 	function AddTaskModal(){
 
-		const [name, setName] = useState();
-		const [description, setDescription] = useState('');
-		const [column, setColumn] = useState(0);
-		const [row, setRow] = useState(0);
-
-		function addTask(){
-			if(!name || name.length < 1){
-				NotificationManager.error('Niepoprawna nazwa zadania', 'Błąd');
-				return;
-			}
-			if(!description || description.length < 1){
-				NotificationManager.error('Niepoprawny opis zadania', 'Błąd');
-				return;
-			}
-			if(column === 0){
-				NotificationManager.error('Wybierz kolumnę', 'Informacja');
-				return;
-			}
-			if(row === 0){
-				NotificationManager.error('Wybierz wiersz', 'Informacja');
-				return;
-			}
-			axios.post(config.API_URL + 'task/', {
-				name: name,
-				description: description,
-				position: tasks.filter(t => t.column === column && t.row === row).length,
-				column: column,
-				row: row
-			}).then(response => {
-				NotificationManager.success('Zadanie zostało dodane', 'Powiadomienie');
-				closeAddTaskModal();
-				loadTaskList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas dodawania zadania', 'Błąd');
-			});
-		}
-
 		return(
 			<Modal show={showAddTaskModal} onHide={closeAddTaskModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Tworzenie zadania</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form onSubmit={addTask} id='form'>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa zadania</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe zadania' required onChange={(e) => setName(e.target.value)}/>
-						</Form.Group>
-						<Form.Group className='mb-3'>
-							<Form.Label>Opis zadania</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz opis zadania' onChange={(e) => setDescription(e.target.value)} required/>
-						</Form.Group>
-						<Form.Group className='mb-3'>
-							<Form.Label>Kolumna</Form.Label>
-							<Form.Select onChange={(e) => setColumn(parseInt(e.target.value))}>
-								<option value={0} key={0}>Wybierz kolumnę</option>
-								{columns.map(c => <option value={c.id} key={c.id}>{c.name}</option>)}
-							</Form.Select>
-						</Form.Group>
-						<Form.Group className='mb-3'>
-							<Form.Label>Wiersz</Form.Label>
-							<Form.Select onChange={(e) => setRow(parseInt(e.target.value))}>
-								<option value={0} key={0}>Wybierz wiersz</option>
-								{rows.map(r => <option value={r.id} key={r.id}>{r.name}</option>)}
-							</Form.Select>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeAddTaskModal}>Zamknij</Button>
-					<Button variant='primary' onClick={addTask}>Zapisz</Button>
-				</Modal.Footer>
+				<AddTaskForm onClose={closeAddTaskModal} onSave={loadTaskList}/>
 			</Modal>
 		)
 	}
@@ -535,213 +386,11 @@ export default function App(){
 	const openEditLimitModal = () => setShowEditLimitModal(true);
 	const closeEditLimitModal = () => setShowEditLimitModal(false);
 
-	const [editLimitModal, setEditLimitModal] = useState();
-
 	function EditLimitModal(){
-
-		const [limit, setLimit] = useState(0);
-
-		function editLimit(){
-			if(limit < 0){
-				NotificationManager.error('Liczba zadań musi być liczbą nieujemną', 'Błąd');
-				return;
-			}
-			axios.patch(config.API_URL + 'limit/' + limits.filter(l => l.column === editLimitModal.column && l.row === editLimitModal.row)[0].id + '/', {
-				limit: limit
-			}).then(response => {
-				NotificationManager.success('Zmiany liczby zadań zostały zapisane', 'Powiadomienie');
-				closeEditLimitModal();
-				loadLimitList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas zapisu liczby zadań', 'Błąd');
-			});
-		}
 
 		return(
 			<Modal show={showEditLimitModal} onHide={closeEditLimitModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Zmiana limitu dla kolumny {!editLimitModal ? '' : columns.filter(c => c.id === editLimitModal.column)[0].name} i wiersza {!editLimitModal ? '' : rows.filter(r => r.id === editLimitModal.row)[0].name}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group className='mb-3'>
-							<Form.Label>Liczba zadań</Form.Label>
-							<Form.Control type='number' defaultValue={!editLimitModal ? '' : limits.filter(l => l.column === editLimitModal.column && l.row === editLimitModal.row)[0].limit} required onChange={(e) => setLimit(e.target.value)}/>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeEditLimitModal}>Zamknij</Button>
-					<Button variant='primary' onClick={editLimit}>Zapisz</Button>
-				</Modal.Footer>
-			</Modal>
-		)
-	}
-
-	/*#####################################################################
-	#                          EDYTOWANIE KOLUMNY                         #
-	#####################################################################*/
-
-	const [showEditColumnModal, setShowEditColumnModal] = useState(false);
-	const openEditColumnModal = () => setShowEditColumnModal(true);
-	const closeEditColumnModal = () => setShowEditColumnModal(false);
-
-	const [editColumnModal, setEditColumnModal] = useState();
-
-	function EditColumnModal(){
-
-		const [name, setName] = useState();
-
-		function editColumn(){
-			if(name < 1){
-				NotificationManager.error('Niepoprawna nazwa kolumny', 'Błąd');
-				return;
-			}
-			axios.patch(config.API_URL + 'column/' + editColumnModal + '/', {
-				name: name
-			}).then(response => {
-				NotificationManager.success('Nowa nazwa kolumny została zapisana', 'Powiadomienie');
-				closeEditColumnModal();
-				loadColumnList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas zapisu nazwy kolumny', 'Błąd');
-			});
-		}
-
-		function deleteColumn(){
-			axios.delete(config.API_URL + 'column/' + editColumnModal + '/', {
-				name: name
-			}).then(response => {
-				NotificationManager.success('Kolumna została usunięta', 'Powiadomienie');
-				closeEditColumnModal();
-				const newColumnList = [];
-				for(let i = 0; i < columns.length; i++){
-					if(columns[i].id === editColumnModal) continue;
-					newColumnList.push(columns[i]);
-				}
-				setEditColumnModal();
-				for(let i = 0; i < newColumnList.length; i++){
-					newColumnList[i].position = i;
-				}
-				setColumns(newColumnList);
-				newColumnList.map(c => (
-					axios.patch(config.API_URL + 'column/' + c.id + '/', {
-						position: c.position
-					})
-				));
-				//loadColumnList();
-				loadLimitList();
-				loadTaskList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas usuwania kolumny', 'Błąd');
-			});
-		}
-
-		return(
-			<Modal show={showEditColumnModal} onHide={closeEditColumnModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Edytowanie kolumny {!editColumnModal ? '' : columns.filter(c => c.id === editColumnModal)[0].name}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa kolumny</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe kolumny' onChange={(e) => setName(e.target.value)}/>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeEditColumnModal}>Zamknij</Button>
-					<Button variant='danger' onClick={deleteColumn}>Usuń</Button>
-					<Button variant='primary' onClick={editColumn}>Zapisz</Button>
-				</Modal.Footer>
-			</Modal>
-		)
-	}
-
-	/*#####################################################################
-	#                          EDYTOWANIE WIERSZA                         #
-	#####################################################################*/
-
-	const [showEditRowModal, setShowEditRowModal] = useState(false);
-	const openEditRowModal = () => setShowEditRowModal(true);
-	const closeEditRowModal = () => setShowEditRowModal(false);
-
-	const [editRowModal, setEditRowModal] = useState();
-
-	function EditRowModal(){
-
-		const [name, setName] = useState();
-
-		function editRow(){
-			if(name < 1){
-				NotificationManager.error('Niepoprawna nazwa wiersza', 'Błąd');
-				return;
-			}
-			axios.patch(config.API_URL + 'row/' + editRowModal + '/', {
-				name: name
-			}).then(response => {
-				NotificationManager.success('Nowa nazwa wiersza została zapisana', 'Powiadomienie');
-				closeEditRowModal();
-				loadRowList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas zapisu nazwy wiersza', 'Błąd');
-			});
-		}
-
-		function deleteRow(){
-			axios.delete(config.API_URL + 'row/' + editRowModal + '/', {
-				name: name
-			}).then(response => {
-				setEditRowModal();
-				NotificationManager.success('Wiersz został usunięty', 'Powiadomienie');
-				closeEditRowModal();
-				const newList = [];
-				for(let i = 0; i < rows.length; i++){
-					if(rows[i].id === editRowModal) continue;
-					newList.push(rows[i]);
-				}
-				setEditRowModal();
-				for(let i = 0; i < newList.length; i++){
-					newList[i].position = i;
-				}
-				setRows(newList);
-				newList.map(r => (
-					axios.patch(config.API_URL + 'row/' + r.id + '/', {
-						position: r.position
-					})
-				));
-				//loadColumnList();
-				loadLimitList();
-				loadTaskList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas usuwania wiersza', 'Błąd');
-			});
-		}
-
-		return(
-			<Modal show={showEditRowModal} onHide={closeEditRowModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Edytowanie wiersza {!editRowModal ? '' : rows.filter(r => r.id === editRowModal)[0].name}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa wiersza</Form.Label>
-							<Form.Control type='text' placeholder='Wpisz nazwe wiersza' onChange={(e) => setName(e.target.value)}/>
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeEditRowModal}>Zamknij</Button>
-					<Button variant='danger' onClick={deleteRow}>Usuń</Button>
-					<Button variant='primary' onClick={editRow}>Zapisz</Button>
-				</Modal.Footer>
+				<EditCellForm column={selectedColumn} row={selectedRow} onClose={closeEditLimitModal} onSave={loadLimitList}/>
 			</Modal>
 		)
 	}
@@ -754,110 +403,11 @@ export default function App(){
 	const openEditTaskModal = () => setShowEditTaskModal(true);
 	const closeEditTaskModal = () => setShowEditTaskModal(false);
 
-	const [editTaskModal, setEditTaskModal] = useState();
-
 	function EditTaskModal(){
 
-		const [name, setName] = useState(tasks.filter(t => t.id === editTaskModal).length === 0 ? null : tasks.filter(t => t.id === editTaskModal)[0].name);
-		const [description, setDescription] = useState(tasks.filter(t => t.id === editTaskModal).length === 0 ? null : tasks.filter(t => t.id === editTaskModal)[0].description);
-
-		function editTask(){
-			if(!name || name.length < 1){
-				NotificationManager.error('Niepoprawna nazwa zadania', 'Błąd');
-				return;
-			}
-			axios.patch(config.API_URL + 'task/' + editTaskModal + '/', {
-				name: name,
-				description: description
-			}).then(response => {
-				NotificationManager.success('Zmiany w zadaniu zapisane', 'Powiadomienie');
-				closeEditTaskModal();
-				loadTaskList();
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas zapisu zadania', 'Błąd');
-			});
-		}
-
-		function deleteTask(){
-			axios.delete(config.API_URL + 'task/' + editTaskModal + '/').then(response => {
-				NotificationManager.success('Zadanie zostało usunięte', 'Powiadomienie');
-				closeEditTaskModal();
-
-				const deletedTask = tasks.filter(t => t.id === editTaskModal)[0];
-				setEditRowModal();
-				const column = deletedTask.column;
-				const row = deletedTask.row;
-
-				const newList = [];
-
-				let newPosition = 0;
-				for(let i = 0; i < tasks.length; i++){
-					if(tasks[i].column === column && tasks[i].row === row){
-						if(tasks[i].id === deletedTask.id) continue;
-						tasks[i].position = newPosition;
-						newPosition++;
-					}
-					newList.push(tasks[i]);
-				}
-
-				newList.filter(t => t.column === column && t.row === row).map(t => (
-					axios.patch(config.API_URL + 'task/' + t.id + '/', {
-						position: t.position
-					})
-				));
-
-				setTasks(newList);
-			})
-			.catch(error => {
-				NotificationManager.error('Błąd podczas usuwania zadania', 'Błąd');
-			});
-		}
-
-		function isUserChecked(e, data){
-			if(e.target.checked){
-				axios.post(config.API_URL + 'taskUser/', {
-					task: data.task,
-					user: data.user
-				}).then(response => {
-					loadTaskUserList();
-				});
-			}
-			else{
-				axios.delete(config.API_URL + 'taskUser/' + data.id + '/').then(response => {
-					loadTaskUserList();
-				});
-			}
-		}
-
 		return(
-			<Modal show={showEditTaskModal} onHide={closeEditTaskModal}>
-				<Modal.Header closeButton>
-					<Modal.Title>Edytowanie zadania {!editTaskModal || tasks.filter(t => t.id === editTaskModal).length === 0 ? '' : tasks.filter(t => t.id === editTaskModal)[0].name}</Modal.Title>
-				</Modal.Header>
-				<Modal.Body>
-					<Form onSubmit={editTask}>
-						<Form.Group className='mb-3'>
-							<Form.Label>Nazwa zadania</Form.Label>
-							<Form.Control type='text' defaultValue={!editTaskModal || tasks.filter(t => t.id === editTaskModal).length === 0 ? '' : tasks.filter(t => t.id === editTaskModal)[0].name} onChange={(e) => setName(e.target.value)}/>
-						</Form.Group>
-						<Form.Group className='mb-3'>
-							<Form.Label>Opis zadania</Form.Label>
-							<Form.Control type='text' defaultValue={!editTaskModal || tasks.filter(t => t.id === editTaskModal).length === 0 ? '' : tasks.filter(t => t.id === editTaskModal)[0].description} onChange={(e) => setDescription(e.target.value)}/>
-						</Form.Group>
-						<Form.Group className='mb-3'>
-							<Form.Label>Przypisani użytkownicy</Form.Label>
-							{users.map(u => (
-								taskUser.filter(tu => tu.task === editTaskModal && tu.user === u.id).length === 0 ? <Form.Check type='checkbox' label={u.name} onClick={(e) => isUserChecked(e, {task: editTaskModal, user: u.id})} key={u.id}/> : <Form.Check type='checkbox' label={u.name} defaultChecked onClick={(e) => isUserChecked(e, {id: taskUser.filter(tu => tu.task === editTaskModal && tu.user === u.id)[0].id, task: editTaskModal, user: u.id})} key={u.id}/>
-							))}
-						</Form.Group>
-					</Form>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant='secondary' onClick={closeEditTaskModal}>Zamknij</Button>
-					<Button variant='danger' onClick={deleteTask}>Usuń</Button>
-					<Button variant='primary' onClick={editTask}>Zapisz</Button>
-				</Modal.Footer>
+			<Modal show={showEditTaskModal} onHide={() => {closeEditTaskModal(); loadTaskUserList()}}>
+				<EditTaskForm task={selectedTask} onClose={() => {closeEditTaskModal(); loadTaskUserList()}} onSave={loadTaskList}/>
 			</Modal>
 		)
 	}
@@ -1006,7 +556,6 @@ export default function App(){
 		<Container>
 			<Header>
 				<div className='title'>Projekt Kanban</div>
-				{/*<div className='subtitle'>dla Billennium</div>*/}
 				<div className='addButton' onClick={openAddColumnModal}>Dodaj kolumnę</div>
 				<div className='addButton' onClick={openAddRowModal}>Dodaj wiersz</div>
 				<div className={columns.length > 0 && rows.length > 0 ? 'addButton' : 'addButton disabled'} onClick={columns.length > 0 && rows.length > 0 ? openAddTaskModal : noAdd}>Dodaj zadanie</div>
@@ -1025,11 +574,12 @@ export default function App(){
 											{...provider.draggableProps}
 											ref={provider.innerRef}
 											{...provider.dragHandleProps}
-											onClick={() => {setEditColumnModal(c.id);openEditColumnModal();}}
+											onClick={() => {setSelectedColumn(c);openEditColumnModal();}}
 											isDragging={snapshot.isDragging}
+											className={c.limit > 0 && tasks.filter(t => t.column === c.id).length > c.limit ? 'overLimit' : ''}
 										>
 											<div className='name'>{c.name}</div>
-											{/*<div className='limit'>{c.limit === 0 ? '∞' : c.limit}</div>*/}
+											<div className='limit'>{c.limit === 0 ? '∞' : c.limit}</div>
 										</Column>
 									)}
 								</Draggable>
@@ -1049,10 +599,12 @@ export default function App(){
 												{...provider.draggableProps}
 												ref={provider.innerRef}
 												{...provider.dragHandleProps}
-												onClick={() => {setEditRowModal(r.id);openEditRowModal();}}
+												onClick={() => {setSelectedRow(r);openEditRowModal();}}
 												isDragging={snapshot.isDragging}
+												className={r.limit > 0 && tasks.filter(t => t.row === r.id).length > r.limit ? 'overLimit' : ''}
 											>
-												{r.name}
+												<div className='name'>{r.name}</div>
+												<div className='limit'>{r.limit === 0 ? '∞' : r.limit}</div>
 											</Row>
 										)}
 									</Draggable>
@@ -1082,13 +634,13 @@ export default function App(){
 																	{...provider.dragHandleProps}
 																	isDragging={snapshot.isDragging}
 																>
-																	<div className='container' onClick={() => {setEditTaskModal(t.id);openEditTaskModal();}}>
+																	<div className='container' onClick={() => {setSelectedTask(t);openEditTaskModal();}}>
 																		<div className='title'>{t.name}</div>
 																		<div className='description'>{t.description}</div>
 																		<div className='users'>
 																			{taskUser.filter(tu => tu.task === t.id).map(tu =>
 																				users.filter(u => u.id === tu.user).map(u =>
-																					<div className='user' key={u.id} style={{background: getRandomColor()}}>
+																					<div className='user' key={u.id}>
 																						{u.name.split('')[0] + u.name.split('')[1]}
 																					</div>
 																				)
@@ -1104,7 +656,8 @@ export default function App(){
 											)}
 										</Droppable>
 										<div className='limit' onClick={() => {
-											setEditLimitModal({column: c.id, row: r.id});
+											setSelectedColumn(c);
+											setSelectedRow(r);
 											openEditLimitModal();
 										}}>
 											Limit zadań: {limits.filter(l => l.column === c.id && l.row === r.id).length > 0 && limits.filter(l => l.column === c.id && l.row === r.id)[0].limit > 0 ? limits.filter(l => l.column === c.id && l.row === r.id)[0].limit : '∞'}
