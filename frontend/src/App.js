@@ -446,7 +446,6 @@ export default function App(){
 	#####################################################################*/
 
 	function onDragEnd(e){
-		console.log(e);
 		const { type, source, destination } = e;
 		if(!destination) return;
 		if(source.droppableId === destination.droppableId && source.index === destination.index) return;
