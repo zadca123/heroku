@@ -125,12 +125,20 @@ export default function EditTaskForm(props){
                         <Form.Label>Opis zadania</Form.Label>
                         <Form.Control type='text' placeholder='Wpisz opis' onChange={(e) => setDescription(e.target.value)}/>
                     </Form.Group>
+                    {/*
                     <Form.Group className='mb-3'>
                         <Form.Label>Przypisani użytkownicy <b>(Zapisywanie automatyczne)</b></Form.Label>
                         {userList.map(u => (
                             taskUserList.filter(tu => tu.task === props.task.id && tu.user === u.id).length === 0 ?
                                 <Form.Check type='checkbox' label={u.name} onClick={(e) => setIsUserChecked(e, u.id)} key={u.id}/> :
                                 <Form.Check type='checkbox' label={u.name} defaultChecked onClick={(e) => setIsUserChecked(e, u.id, taskUserList.filter(tu => tu.task === props.task.id && tu.user === u.id)[0].id)} key={u.id}/>
+                        ))}
+                    </Form.Group>
+                    */}
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Przypisani użytkownicy</Form.Label>
+                        {taskUserList.filter(tu => tu.task === props.task.id).map(tu => (
+                            <div key={tu.id}>{userList.filter(u => u.id === tu.user)[0].name}<br/></div>
                         ))}
                     </Form.Group>
                 </Form>

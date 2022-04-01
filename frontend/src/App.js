@@ -205,7 +205,8 @@ const Task = styled.div`
 	.description{}
 
 	.users{
-		text-align: center;
+		display: flex;
+		flex-direction: row;
 	}
 
 	.user{
@@ -216,10 +217,38 @@ const Task = styled.div`
 		line-height: 22px;
 		color: #FFFFFF;
 		margin: 2px;
-		display: inline-block;
 		padding: 2px;
 		box-sizing: content-box;
 		background: #4D96FF;
+	}
+`;
+
+const AvailableUsers = styled.div`
+	margin: 10px;
+
+	.title{
+		font-weight: 700;
+		font-size: 20px;
+	}
+
+	.users{
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+
+		.user{
+			width: 22px;
+			height: 22px;
+			border-radius: 11px;
+			text-align: center;
+			line-height: 22px;
+			color: #FFFFFF;
+			margin: 2px;
+			padding: 2px;
+			box-sizing: content-box;
+			background: #4D96FF;
+			flex-shrink: 0;
+		}
 	}
 `;
 
@@ -417,6 +446,7 @@ export default function App(){
 	#####################################################################*/
 
 	function onDragEnd(e){
+		console.log(e);
 		const { type, source, destination } = e;
 		if(!destination) return;
 		if(source.droppableId === destination.droppableId && source.index === destination.index) return;
@@ -546,24 +576,126 @@ export default function App(){
 			});
 			setTasks(newList);
 		}
+		if(type === 'user'){
+			// Przypinanie użytkownika do zadania
+			if(source.droppableId === 'user-container' && destination.droppableId.split('-').length === 3){
+				const userId = parseInt(e.draggableId.split('-')[1]);
+				const taskId = parseInt(destination.droppableId.split('-')[2]);
+				const userIsInTask = taskUser.filter(tu => tu.task === taskId && tu.user === userId).length > 0;
+				if(userIsInTask){
+					NotificationManager.info('Użytkownik jest już przypięty do tego zadania');
+					return;
+				}
+				axios.post(config.API_URL + 'taskUser/', {
+					task: taskId,
+					user: userId
+				}).then(response => {
+					NotificationManager.success('Użytkownik przypięty', 'Powiadomienie');
+					axios.get(config.API_URL + 'taskUser').then(response => {
+						setTaskUser(response.data);
+					});
+				})
+				.catch(error => {
+					NotificationManager.error('Użytkownik nieprzypięty', 'Błąd');
+				});
+				return;
+			}
+			// Odpinanie użytkownika od zadania
+			if(destination.droppableId === 'user-container' && source.droppableId.split('-').length === 3){
+				const taskUserId = parseInt(e.draggableId.split('-')[1]);
+				axios.delete(config.API_URL + 'taskUser/' + taskUserId + '/').then(response => {
+					NotificationManager.success('Użytkownik odpięty', 'Powiadomienie');
+					axios.get(config.API_URL + 'taskUser').then(response => {
+						setTaskUser(response.data);
+					});
+				})
+				.catch(error => {
+					NotificationManager.error('Użytkownik nieodpięty', 'Błąd');
+				});
+				return;
+			}
+			// Przepinanie użytkownika do innego zadania
+			if(source.droppableId.split('-').length === 3 && destination.droppableId.split('-').length === 3){
+				if(source.droppableId === destination.droppableId) return;
+				const taskUserId = parseInt(e.draggableId.split('-')[1]);
+				const destinationTaskId = parseInt(destination.droppableId.split('-')[2]);
+				const userId = parseInt(e.draggableId.split('-')[2]);
+				const userIsInTask = taskUser.filter(tu => tu.task === destinationTaskId && tu.user === userId).length > 0;
+				if(userIsInTask){
+					NotificationManager.info('Użytkownik jest już przypięty do tego zadania');
+					return;
+				}
+				axios.patch(config.API_URL + 'taskUser/' + taskUserId + '/', {
+					task: destinationTaskId
+				}).then(response => {
+					NotificationManager.success('Użytkownik przepięty', 'Powiadomienie');
+					axios.get(config.API_URL + 'taskUser').then(response => {
+						setTaskUser(response.data);
+					});
+				})
+				.catch(error => {
+					NotificationManager.error('Użytkownik nieprzepięty', 'Błąd');
+				});
+			}
+		}
 	}
 
 	function noAdd(){
 		NotificationManager.error('Brak kolumn lub wierszy', 'Błąd');
 	}
 
+	const loadAvailableUsers = () => {
+		let i = 3;
+		let a = []
+		users.map(u => {
+			for(let j = taskUser.filter(tu => tu.user === u.id).length; j < i; j++){
+				a.push(u)
+			}
+		})
+		return a;
+	}
+
 	return(
 		<Container>
-			<Header>
-				<div className='title'>Projekt Kanban</div>
-				<div className='addButton' onClick={openAddColumnModal}>Dodaj kolumnę</div>
-				<div className='addButton' onClick={openAddRowModal}>Dodaj wiersz</div>
-				<div className={columns.length > 0 && rows.length > 0 ? 'addButton' : 'addButton disabled'} onClick={columns.length > 0 && rows.length > 0 ? openAddTaskModal : noAdd}>Dodaj zadanie</div>
-				<AddColumnModal/>
-				<AddRowModal/>
-				<AddTaskModal/>
-			</Header>
 			<DragDropContext onDragEnd={onDragEnd}>
+				<Header>
+					<div className='title'>Projekt Kanban</div>
+					<div className='addButton' onClick={openAddColumnModal}>Dodaj kolumnę</div>
+					<div className='addButton' onClick={openAddRowModal}>Dodaj wiersz</div>
+					<div className={columns.length > 0 && rows.length > 0 ? 'addButton' : 'addButton disabled'} onClick={columns.length > 0 && rows.length > 0 ? openAddTaskModal : noAdd}>Dodaj zadanie</div>
+					<AvailableUsers>
+						<div className='title'>
+							Dostępni użytkownicy:
+						</div>
+						<Droppable droppableId='user-container' direction='horizontal' type='user'>
+							{provider => (
+								<div className='users'
+									{...provider.droppableProps}
+									ref={provider.innerRef}
+								>
+									{loadAvailableUsers().map((u, i) => {
+										return <Draggable draggableId={'user-' + u.id + '-' + i} index={i} key={'user-' + u.id + '-' + i}>
+											{(provider, snapshot) => (
+												<div
+													className='user'
+													{...provider.draggableProps}
+													ref={provider.innerRef}
+													{...provider.dragHandleProps}
+												>
+													{u.name.split('')[0] + u.name.split('')[1]}
+												</div>
+											)}
+										</Draggable>
+									})}
+									{provider.placeholder}
+								</div>
+							)}
+						</Droppable>
+					</AvailableUsers>
+					<AddColumnModal/>
+					<AddRowModal/>
+					<AddTaskModal/>
+				</Header>
 				<Droppable droppableId='column-container' direction='horizontal' type='column'>
 					{provider => (
 						<ColumnContainer {...provider.droppableProps} ref={provider.innerRef}>
@@ -637,6 +769,34 @@ export default function App(){
 																	<div className='container' onClick={() => {setSelectedTask(t);openEditTaskModal();}}>
 																		<div className='title'>{t.name}</div>
 																		<div className='description'>{t.description}</div>
+																		<Droppable droppableId={'user-container-' + t.id} direction='horizontal' type='user'>
+																			{(provider, snapshot) => (
+																				<div
+																					{...provider.droppableProps}
+																					ref={provider.innerRef}
+																					className='users'
+																				>
+																					{taskUser.filter(tu => tu.task === t.id).map((tu, i) => {
+																						const u = users.filter(u => u.id === tu.user)[0];
+																						return <Draggable draggableId={'user-' + tu.id + '-' + u.id} index={i} key={'user-' + tu.id + '-' + u.id}>
+																							{(provider, snapshot) => (
+																								<div
+																									{...provider.draggableProps}
+																									ref={provider.innerRef}
+																									{...provider.dragHandleProps}
+																									className='user'
+																								>
+																									{u.name.split('')[0] + u.name.split('')[1]}
+																								</div>
+																							)}
+																						</Draggable>
+																						})
+																					}
+																					{provider.placeholder}
+																				</div>
+																			)}
+																		</Droppable>
+																		{/*
 																		<div className='users'>
 																			{taskUser.filter(tu => tu.task === t.id).map(tu =>
 																				users.filter(u => u.id === tu.user).map(u =>
@@ -646,12 +806,13 @@ export default function App(){
 																				)
 																			)}
 																		</div>
+																		*/}
 																	</div>
 																</Task>
 															)}
 														</Draggable>
 													))}
-												{provider.placeholder}
+													{provider.placeholder}
 												</TaskList>
 											)}
 										</Droppable>
