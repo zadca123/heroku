@@ -223,6 +223,12 @@ const Task = styled.div`
 	}
 `;
 
+const Users = styled.div`
+	display: flex;
+	flex-direction: row;
+	min-height: ${props => props.isDraggingOver ? '30px' : '5px'};
+`;
+
 const AvailableUsers = styled.div`
 	margin: 10px;
 
@@ -770,10 +776,11 @@ export default function App(){
 																		<div className='description'>{t.description}</div>
 																		<Droppable droppableId={'user-container-' + t.id} direction='horizontal' type='user'>
 																			{(provider, snapshot) => (
-																				<div
+																				<Users
 																					{...provider.droppableProps}
 																					ref={provider.innerRef}
-																					className='users'
+																					
+																					isDraggingOver={snapshot.isDraggingOver}
 																				>
 																					{taskUser.filter(tu => tu.task === t.id).map((tu, i) => {
 																						const u = users.filter(u => u.id === tu.user)[0];
@@ -792,7 +799,7 @@ export default function App(){
 																						})
 																					}
 																					{provider.placeholder}
-																				</div>
+																				</Users>
 																			)}
 																		</Droppable>
 																		{/*
