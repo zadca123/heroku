@@ -680,7 +680,7 @@ export default function App(){
 									ref={provider.innerRef}
 								>
 									{loadAvailableUsers().map((u, i) => {
-										return <Draggable draggableId={'user-' + u.id + '-' + i} index={i} key={'user-' + u.id + '-' + i}>
+										return <Draggable draggableId={'auser-' + u.id + '-' + i} index={i} key={'auser-' + u.id + '-' + i}>
 											{(provider, snapshot) => (
 												<div
 													className='user'
