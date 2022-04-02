@@ -8,8 +8,8 @@ import config from '../../config.json';
 
 export default function AddColumnForm(props){
 
-    const [name, setName] = useState('');
-    const [limit, setLimit] = useState(0);
+    const [name, setName] = useState();
+    const [limit, setLimit] = useState();
 
     const [columnList , setColumnList] = useState([]);
 
@@ -20,11 +20,15 @@ export default function AddColumnForm(props){
     }, []);
 
     function save(){
-        if(name.length < 1){
+        if(!name || name.length < 1){
             NotificationManager.error('Niepoprawna nazwa', 'Błąd');
             return;
         }
-        if(limit < 0){
+        if(columnList.filter(c => c.name === name).length > 0){
+            NotificationManager.error('Kolumna istnieje', 'Błąd');
+            return;
+        }
+        if(!Number.isInteger(limit) || limit < 0){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
@@ -55,7 +59,7 @@ export default function AddColumnForm(props){
                     </Form.Group>
                     <Form.Group className='mb-3'>
                         <Form.Label>Limit zadań na kolumnę</Form.Label>
-                        <Form.Control type='number' placeholder='Wpisz limit' min='0' onChange={(e) => setLimit(e.target.value)}/>
+                        <Form.Control type='number' placeholder='Wpisz limit' min='0' onChange={(e) => setLimit(parseInt(e.target.value))}/>
                     </Form.Group>
                 </Form>
             </Modal.Body>

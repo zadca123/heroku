@@ -8,14 +8,14 @@ import config from '../../config.json';
 
 export default function EditTaskForm(props){
 
-    const [name, setName] = useState('');
-	const [description, setDescription] = useState('');
-	const [column, setColumn] = useState(0);
-	const [row, setRow] = useState(0);
+    const [name, setName] = useState(props.task.name);
+	const [description, setDescription] = useState(props.task.description);
+	//const [column, setColumn] = useState(0);
+	//const [row, setRow] = useState(0);
 
     const [taskList , setTaskList] = useState([]);
-    const [columnList , setColumnList] = useState([]);
-    const [rowList , setRowList] = useState([]);
+    //const [columnList , setColumnList] = useState([]);
+    //const [rowList , setRowList] = useState([]);
     const [userList , setUserList] = useState([]);
     const [taskUserList , setTaskUserList] = useState([]);
 
@@ -23,12 +23,14 @@ export default function EditTaskForm(props){
         axios.get(config.API_URL + 'task').then(response => {
 			setTaskList(response.data);
 		});
+        /*
         axios.get(config.API_URL + 'column').then(response => {
 			setColumnList(response.data);
 		});
         axios.get(config.API_URL + 'row').then(response => {
 			setRowList(response.data);
 		});
+        */
         axios.get(config.API_URL + 'user').then(response => {
 			setUserList(response.data);
 		});
@@ -38,7 +40,7 @@ export default function EditTaskForm(props){
     }, []);
 
     function save(){
-        if(name.length < 1){
+        if(!name || name.length < 1){
             NotificationManager.error('Niepoprawna nazwa', 'Błąd');
             return;
         }
@@ -80,6 +82,7 @@ export default function EditTaskForm(props){
         });
     }
 
+    /*
     function setIsUserChecked(e, userId, taskUserId){
         if(e.target.checked){
             axios.post(config.API_URL + 'taskUser/', {
@@ -107,6 +110,7 @@ export default function EditTaskForm(props){
             });
         }
     }
+    */
 
     return(
         <>
@@ -119,11 +123,11 @@ export default function EditTaskForm(props){
                 <Form>
                     <Form.Group className='mb-3'>
                         <Form.Label>Nazwa zadania</Form.Label>
-                        <Form.Control type='text' placeholder='Wpisz nazwe' onChange={(e) => setName(e.target.value)}/>
+                        <Form.Control type='text' placeholder='Wpisz nazwe' onChange={(e) => setName(e.target.value)} defaultValue={props.task.name}/>
                     </Form.Group>
                     <Form.Group className='mb-3'>
                         <Form.Label>Opis zadania</Form.Label>
-                        <Form.Control type='text' placeholder='Wpisz opis' onChange={(e) => setDescription(e.target.value)}/>
+                        <Form.Control type='text' placeholder='Wpisz opis' onChange={(e) => setDescription(e.target.value)} defaultValue={props.task.description}/>
                     </Form.Group>
                     {/*
                     <Form.Group className='mb-3'>

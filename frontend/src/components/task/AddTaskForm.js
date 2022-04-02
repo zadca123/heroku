@@ -8,7 +8,7 @@ import config from '../../config.json';
 
 export default function AddTaskForm(props){
 
-    const [name, setName] = useState('');
+    const [name, setName] = useState();
 	const [description, setDescription] = useState('');
 	const [column, setColumn] = useState(0);
 	const [row, setRow] = useState(0);
@@ -30,15 +30,15 @@ export default function AddTaskForm(props){
     }, []);
 
     function save(){
-        if(name.length < 1){
+        if(!name || name.length < 1){
             NotificationManager.error('Niepoprawna nazwa', 'Błąd');
             return;
         }
-        if(column === 0){
+        if(column < 1 || columnList.filter(c => c.id === column).length === 0){
             NotificationManager.error('Wybierz kolumnę', 'Informacja');
             return;
         }
-        if(row === 0){
+        if(row < 1 || rowList.filter(r => r.id === row).length === 0){
             NotificationManager.error('Wybierz wiersz', 'Informacja');
             return;
         }

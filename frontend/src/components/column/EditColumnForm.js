@@ -8,8 +8,8 @@ import config from '../../config.json';
 
 export default function EditColumnForm(props){
 
-    const [name, setName] = useState('');
-    const [limit, setLimit] = useState(0);
+    const [name, setName] = useState(props.column.name);
+    const [limit, setLimit] = useState(props.column.limit);
 
     const [columnList, setColumnList] = useState([]);
 
@@ -20,11 +20,15 @@ export default function EditColumnForm(props){
     }, []);
 
     function save(){
-        if(name.length < 1){
+        if(!name || name.length < 1){
             NotificationManager.error('Niepoprawna nazwa', 'Błąd');
             return;
         }
-        if(limit < 0){
+        if(columnList.filter(c => c.name === name).length > 0 && name !== props.column.name){
+            NotificationManager.error('Kolumna istnieje', 'Błąd');
+            return;
+        }
+        if(!Number.isInteger(limit) || limit < 0){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
@@ -76,11 +80,11 @@ export default function EditColumnForm(props){
                 <Form>
                     <Form.Group className='mb-3'>
                         <Form.Label>Nazwa kolumny</Form.Label>
-                        <Form.Control type='text' placeholder='Wpisz nazwe' onChange={(e) => setName(e.target.value)}/>
+                        <Form.Control type='text' placeholder='Wpisz nazwe' onChange={(e) => setName(e.target.value)} defaultValue={props.column.name}/>
                     </Form.Group>
                     <Form.Group className='mb-3'>
                         <Form.Label>Limit zadań na kolumnę</Form.Label>
-                        <Form.Control type='number' placeholder='Wpisz limit' min='0' onChange={(e) => setLimit(e.target.value)}/>
+                        <Form.Control type='number' placeholder='Wpisz limit' min='0' onChange={(e) => setLimit(parseInt(e.target.value))} defaultValue={props.column.limit}/>
                     </Form.Group>
                 </Form>
             </Modal.Body>

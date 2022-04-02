@@ -287,6 +287,7 @@ export default function App(){
 	const [selectedColumn, setSelectedColumn] = useState();
 	const [selectedRow, setSelectedRow] = useState();
 	const [selectedTask, setSelectedTask] = useState();
+	const [selectedCell, setSelectedCell] = useState();
 
 	/*#####################################################################
 	#                           DODAWANIE KOLUMNY                         #
@@ -425,7 +426,7 @@ export default function App(){
 
 		return(
 			<Modal show={showEditLimitModal} onHide={closeEditLimitModal}>
-				<EditCellForm column={selectedColumn} row={selectedRow} onClose={closeEditLimitModal} onSave={loadLimitList}/>
+				<EditCellForm column={selectedColumn} row={selectedRow} cell={selectedCell} onClose={closeEditLimitModal} onSave={loadLimitList}/>
 			</Modal>
 		)
 	}
@@ -825,6 +826,7 @@ export default function App(){
 										<div className='limit' onClick={() => {
 											setSelectedColumn(c);
 											setSelectedRow(r);
+											setSelectedCell(limits.filter(l => l.column === c.id && l.row === r.id)[0])
 											openEditLimitModal();
 										}}>
 											Limit zadań: {limits.filter(l => l.column === c.id && l.row === r.id).length > 0 && limits.filter(l => l.column === c.id && l.row === r.id)[0].limit > 0 ? limits.filter(l => l.column === c.id && l.row === r.id)[0].limit : '∞'}
