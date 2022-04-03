@@ -210,7 +210,7 @@ export default function EditTaskForm(props){
                     <Form.Group className='mb-3'>
                         {taskUserList.filter(tu => tu.task === props.task.id).length > 0 ? <Form.Label>Przypisani użytkownicy</Form.Label> : null}
                         {taskUserList.filter(tu => tu.task === props.task.id).map(tu => (
-                            <div key={tu.id}>{userList.filter(u => u.id === tu.user)[0].name}<br/></div>
+                            <div key={tu.id}>{userList.length > 0 ? userList.filter(u => u.id === tu.user)[0].name : ''}<br/></div>
                         ))}
                     </Form.Group>
                 </Form>
