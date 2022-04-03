@@ -786,6 +786,7 @@ export default function App(){
 																					isDraggingOver={snapshot.isDraggingOver}
 																				>
 																					{taskUser.filter(tu => tu.task === t.id).map((tu, i) => {
+																						if(users.length === 0) return;
 																						const u = users.filter(u => u.id === tu.user)[0];
 																						return <Draggable draggableId={'user-' + tu.id + '-' + u.id} index={i} key={'user-' + tu.id + '-' + u.id}>
 																							{(provider, snapshot) => (
