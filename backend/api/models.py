@@ -26,6 +26,7 @@ class Task(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(default='', blank=True)
     position = models.IntegerField(default=0)
+    color = models.CharField(max_length=7, default='', blank=True)
     column = models.ForeignKey(Column, on_delete=models.CASCADE)
     row = models.ForeignKey(Row, on_delete=models.CASCADE)
 

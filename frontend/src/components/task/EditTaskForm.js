@@ -5,11 +5,60 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { NotificationManager } from 'react-notifications';
 import config from '../../config.json';
+import { HexColorPicker, HexColorInput } from "react-colorful";
+import styled from 'styled-components';
+
+const ColorPicker = styled.div`
+    .react-colorful{
+        width: auto;
+        border-radius: 12px;
+    }
+
+    .react-colorful__saturation{
+        margin: 15px 0;
+        border-radius: 5px;
+        border-bottom: none;
+    }
+
+    .react-colorful__hue{
+        order: -1;
+    }
+
+    .react-colorful__hue, .react-colorful__alpha{
+        height: 14px;
+        border-radius: 5px;
+    }
+
+    .react-colorful__hue-pointer, .react-colorful__alpha-pointer{
+        width: 20px;
+        height: 20px;
+    }
+
+    input{
+        display: block;
+        box-sizing: border-box;
+        width: 90px;
+        margin: 0 auto 15px auto;
+        padding: 6px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background: #eee;
+        outline: none;
+        font: inherit;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    input:focus{
+        border-color: #4298ef;
+    }
+`;
 
 export default function EditTaskForm(props){
 
     const [name, setName] = useState(props.task.name);
 	const [description, setDescription] = useState(props.task.description);
+    const [color, setColor] = useState(props.task.color);
 	//const [column, setColumn] = useState(0);
 	//const [row, setRow] = useState(0);
 
@@ -47,6 +96,7 @@ export default function EditTaskForm(props){
         axios.patch(config.API_URL + 'task/' + props.task.id + '/', {
             name: name,
             description: description,
+            color: color
         }).then(response => {
             NotificationManager.success('Zadanie zapisane', 'Powiadomienie');
             props.onClose();
@@ -54,6 +104,19 @@ export default function EditTaskForm(props){
         })
         .catch(error => {
             NotificationManager.error('Zadanie niezapisane', 'Błąd');
+        });
+    }
+
+    function resetColor(){
+        axios.patch(config.API_URL + 'task/' + props.task.id + '/', {
+            color: ''
+        }).then(response => {
+            NotificationManager.success('Kolor zresetowany', 'Powiadomienie');
+            props.onClose();
+            props.onSave();
+        })
+        .catch(error => {
+            NotificationManager.error('Kolor niezresetowany', 'Błąd');
         });
     }
 
@@ -139,8 +202,13 @@ export default function EditTaskForm(props){
                         ))}
                     </Form.Group>
                     */}
+                    <ColorPicker>
+                        <HexColorPicker color={color} onChange={setColor}/>
+                        <HexColorInput color={color} onChange={setColor} prefixed/>
+                    </ColorPicker>
+
                     <Form.Group className='mb-3'>
-                        <Form.Label>Przypisani użytkownicy</Form.Label>
+                        {taskUserList.filter(tu => tu.task === props.task.id).length > 0 ? <Form.Label>Przypisani użytkownicy</Form.Label> : null}
                         {taskUserList.filter(tu => tu.task === props.task.id).map(tu => (
                             <div key={tu.id}>{userList.filter(u => u.id === tu.user)[0].name}<br/></div>
                         ))}
@@ -149,6 +217,7 @@ export default function EditTaskForm(props){
             </Modal.Body>
             <Modal.Footer>
                 <Button variant='secondary' onClick={props.onClose}>Zamknij</Button>
+                <Button variant='secondary' onClick={resetColor}>Resetuj kolor</Button>
                 <Button variant='danger' onClick={deleteTask}>Usuń</Button>
                 <Button variant='primary' onClick={save}>Zapisz</Button>
             </Modal.Footer>

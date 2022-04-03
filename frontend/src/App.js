@@ -194,7 +194,7 @@ const Task = styled.div`
 		box-sizing: content-box;
 		
 		&:hover{
-			background: #FAFBA4;
+			background: #FAFBA4!important;
 		}
 	}
 
@@ -772,7 +772,10 @@ export default function App(){
 																	{...provider.dragHandleProps}
 																	isDragging={snapshot.isDragging}
 																>
-																	<div className='container' onClick={() => {setSelectedTask(t);openEditTaskModal();}}>
+																	<div className='container'
+																		onClick={() => {setSelectedTask(t);openEditTaskModal();}}
+																		style={{background: t.color}}
+																	>
 																		<div className='title'>{t.name}</div>
 																		<div className='description'>{t.description}</div>
 																		<Droppable droppableId={'user-container-' + t.id} direction='horizontal' type='user'>
@@ -780,7 +783,6 @@ export default function App(){
 																				<Users
 																					{...provider.droppableProps}
 																					ref={provider.innerRef}
-																					
 																					isDraggingOver={snapshot.isDraggingOver}
 																				>
 																					{taskUser.filter(tu => tu.task === t.id).map((tu, i) => {
