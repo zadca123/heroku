@@ -1,0 +1,18 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ./frontend
+    image: dockerprocode.azurecr.io/docker-deploy_web_1
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: ./backend
+    image: dockerprocode.azurecr.io/docker-deploy_api_1
+    ports:
+      - "8000:8000"
