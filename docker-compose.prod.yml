@@ -11,7 +11,8 @@ services:
     #   API_URL: "https://api.myapp.com/"
     ports:
       - "3000:3000"
-      # - "8000:3000"
+    expose:
+      - '3000'
     restart: always
     depends_on:
       - api
@@ -23,6 +24,8 @@ services:
     restart: on-failure
     ports:
       - "8000:8000"
+    expose:
+      - '8000'
     depends_on:
       - db
 
@@ -57,7 +60,7 @@ services:
       - '3306:3306'
     expose:
       - '3306'
-    volumes:
-      - db_data: /var/lib/mysql
-volumes:
-  - db_data:
+    # volumes:
+    #   - db_data: /var/lib/mysql
+# volumes:
+  # - db_data:
