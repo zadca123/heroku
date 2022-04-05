@@ -1,6 +1,7 @@
-# Step 1: Build stage    
+# Step 1: Build stage
 FROM node:14.16.0-alpine as build-stage
 WORKDIR /app
+ENV PORT 8080
 COPY package*.json ./
 RUN npm install
 COPY . .
