@@ -1,0 +1,81 @@
+{
+  "id": "/subscriptions/6ecd7f21-b3b2-4d05-9ae6-2f357f09cfbc/resourceGroups/DefaultResourceGroup-DEWC/providers/Microsoft.Resources/deployments/Microsoft.Web-WebApp-Portal-6faed14d-b2a8",
+  "name": "Microsoft.Web-WebApp-Portal-6faed14d-b2a8",
+  "type": "Microsoft.Resources/deployments",
+  "tags": {
+    "primaryResourceId": "/subscriptions/6ecd7f21-b3b2-4d05-9ae6-2f357f09cfbc/resourcegroups/DefaultResourceGroup-DEWC/providers/Microsoft.Web/sites/procodetest2",
+    "marketplaceItemId": "Microsoft.AppSvcLinux",
+    "provisioningHash": "customize-post-provisioning-steps-webapp-deployment"
+  },
+  "properties": {
+    "templateHash": "9366845475360005702",
+    "parameters": {
+      "subscriptionId": {
+        "type": "String",
+        "value": "6ecd7f21-b3b2-4d05-9ae6-2f357f09cfbc"
+      },
+      "name": {
+        "type": "String",
+        "value": "procodetest2"
+      },
+      "location": {
+        "type": "String",
+        "value": "Germany West Central"
+      },
+      "hostingPlanName": {
+        "type": "String",
+        "value": "ASP-DefaultResourceGroupDEWC-8b23"
+      },
+      "serverFarmResourceGroup": {
+        "type": "String",
+        "value": "defaultresourcegroup-dewc"
+      },
+      "alwaysOn": {
+        "type": "Bool",
+        "value": false
+      },
+      "linuxFxVersion": {
+        "type": "String",
+        "value": "COMPOSE|dmVyc2lvbjogIjMuOCIKCnNlcnZpY2VzOgogIHdlYjoKICAgIGJ1aWxkOgogICAgICBjb250ZXh0OiAuL2Zyb250ZW5kCiAgICBpbWFnZTogZG9ja2VycHJvY29kZS5henVyZWNyLmlvL2RvY2tlci1kZXBsb3lfd2ViXzEKICAgICMgY29tbWFuZDogbnBtIHN0YXJ0CiAgICBwb3J0czoKICAgICAgLSAiMzAwMDozMDAwIgogICAgZGVwZW5kc19vbjoKICAgICAgLSBhcGkKCiAgYXBpOgogICAgYnVpbGQ6CiAgICAgIGNvbnRleHQ6IC4vYmFja2VuZAogICAgIyBjb21tYW5kOiBweXRob24gbWFuYWdlLnB5IHJ1bnNlcnZlciAwLjAuMC4wOjgwMDAKICAgIGltYWdlOiBkb2NrZXJwcm9jb2RlLmF6dXJlY3IuaW8vZG9ja2VyLWRlcGxveV9hcGlfMQogICAgcG9ydHM6CiAgICAgIC0gIjgwMDA6ODAwMCIKICAgIGVudmlyb25tZW50OgogICAgICBEQl9VUkw6IG15c3FsOi8vZGIvcHJvY29kZQogICAgICAjIERFQlVHOiAxCiAgICAgICMgU0VDUkVUX0tFWTogQU5ZVEhJTkdZT1VXQU5UQlVUU1RST05HIQogICAgICAjIERKQU5HT19BTExPV0VEX0hPU1RTOiBsb2NhbGhvc3QgMTI3LjAuMC4xIFs6OjFdCiAgICBkZXBlbmRzX29uOgogICAgICAtIGRiCgogIGRiOgogICAgaW1hZ2U6IG15c3FsOjguMAogICAgcmVzdGFydDogYWx3YXlzCiAgICBlbnZpcm9ubWVudDoKICAgICAgTVlTUUxfREFUQUJBU0U6ICdwcm9jb2RlJwogICAgICAjIFNvIHlvdSBkb24ndCBoYXZlIHRvIHVzZSByb290LCBidXQgeW91IGNhbiBpZiB5b3UgbGlrZQogICAgICAjIE1ZU1FMX1VTRVI6ICdyb290JwogICAgICAjIFlvdSBjYW4gdXNlIHdoYXRldmVyIHBhc3N3b3JkIHlvdSBsaWtlCiAgICAgIE1ZU1FMX1BBU1NXT1JEOiAnJwogICAgICAjIFBhc3N3b3JkIGZvciByb290IGFjY2VzcwogICAgICBNWVNRTF9ST09UX1BBU1NXT1JEOiAnJwogICAgICBNWVNRTF9BTExPV19FTVBUWV9QQVNTV09SRDogMQogICAgICAjIE1ZU1FMX1JBTkRPTV9ST09UX1BBU1NXT1JEOiB5ZXMKICAgIHBvcnRzOgogICAgICAjIDxQb3J0IGV4cG9zZWQ+IDogPCBNeVNRTCBQb3J0IHJ1bm5pbmcgaW5zaWRlIGNvbnRhaW5lcj4KICAgICAgLSAnMzMwNjozMzA2JwogICAgZXhwb3NlOgogICAgICAjIE9wZW5zIHBvcnQgMzMwNiBvbiB0aGUgY29udGFpbmVyCiAgICAgIC0gJzMzMDYnCiAgICAgICMgV2hlcmUgb3VyIGRhdGEgd2lsbCBiZSBwZXJzaXN0ZWQKICAgIHZvbHVtZXM6CiAgICAgIC0gbXktZGI6L3Zhci9saWIvbXlzcWwKICAgICAgIyAtIG15LWRiOi9ydW4vbXlzcWxkCiAgICAgICMgLSAvdmFyL3J1bi9teXNxbGQvbXlzcWxkLnNvY2s6L3RtcC9teXNxbC5zb2NrCgojIE5hbWVzIG91ciB2b2x1bWUKdm9sdW1lczoKICBteS1kYjoK"
+      },
+      "dockerRegistryUrl": {
+        "type": "String",
+        "value": "https://dockerprocode.azurecr.io"
+      },
+      "dockerRegistryUsername": {
+        "type": "String",
+        "value": "dockerprocode"
+      },
+      "dockerRegistryPassword": {
+        "type": "SecureString"
+      },
+      "dockerRegistryStartupCommand": {
+        "type": "String",
+        "value": ""
+      }
+    },
+    "mode": "Incremental",
+    "debugSetting": {
+      "detailLevel": "None"
+    },
+    "provisioningState": "Running",
+    "timestamp": "2022-04-04T09:35:26.5630773Z",
+    "duration": "PT0.5394906S",
+    "correlationId": "dde673dd-784d-4d27-9e1e-780243a2cda9",
+    "providers": [
+      {
+        "namespace": "Microsoft.Web",
+        "resourceTypes": [
+          {
+            "resourceType": "sites",
+            "locations": [
+              "germanywestcentral"
+            ]
+          }
+        ]
+      }
+    ],
+    "dependencies": [],
+    "validationLevel": "Template"
+  }
+}
