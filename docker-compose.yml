@@ -4,7 +4,7 @@ services:
   web:
     build:
       context: ./frontend
-    image: dockerprocode.azurecr.io/docker-deploy_web
+    image: dockerprocode.azurecr.io/web
     ports:
       - "3000:3000"
     depends_on:
@@ -13,7 +13,7 @@ services:
   api:
     build:
       context: ./backend
-    image: dockerprocode.azurecr.io/docker-deploy_api
+    image: dockerprocode.azurecr.io/api
     ports:
       - "8000:8000"
     depends_on:
