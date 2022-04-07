@@ -26,6 +26,6 @@ services:
     environment:
       MYSQL_DATABASE: 'user'
       MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'user'
-      MYSQL_ROOT_PASSWORD: 'user'
+      # MYSQL_PASSWORD: 'user'
+      # MYSQL_ROOT_PASSWORD: 'user'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
