@@ -4,7 +4,6 @@ services:
   web:
     build:
       context: ./frontend
-    image: dockerprocode.azurecr.io/web
     ports:
       - "3000:3000"
     depends_on:
@@ -13,7 +12,6 @@ services:
   api:
     build:
       context: ./backend
-    image: dockerprocode.azurecr.io/api
     ports:
       - "8000:8000"
     depends_on:
@@ -26,8 +24,8 @@ services:
     expose:
       - '3306'
     environment:
-      MYSQL_DATABASE: 'mysql'
-      # MYSQL_USERNAME: 'mysql'
-      # MYSQL_PASSWORD: 'mysql'
-      # MYSQL_ROOT_PASSWORD: 'mysql'
+      MYSQL_DATABASE: 'user'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'user'
+      MYSQL_ROOT_PASSWORD: 'user'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1

@@ -100,14 +100,11 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        #'NAME': '22470_kanban',
-        #'HOST': 'jrk.atthost24.pl',
-        #'USER': '22470_kanban',
-        #'PASSWORD': 'Vs0GlyUR5a7Yb',
-        "NAME": "mysql",
         "HOST": "db",
-        "USER": "root",
-        "PASSWORD": "",
+        "PORT": "3306",
+        "NAME": "user",
+        "USER": "user",
+        "PASSWORD": "user",
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
 }
