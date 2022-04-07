@@ -25,24 +25,9 @@ services:
       - '3306:3306'
     expose:
       - '3306'
-    # volumes:
-    #   - db_data: /var/lib/mysql
     environment:
-      MYSQL_DATABASE: 'procode'
-      # MYSQL_PASSWORD: ''
-      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_DATABASE: 'mysql'
+      # MYSQL_USERNAME: 'mysql'
+      # MYSQL_PASSWORD: 'mysql'
+      # MYSQL_ROOT_PASSWORD: 'mysql'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
-
-  # db:
-  #   image: 'postgres:latest'
-  #   ports:
-  #     - 5432:5432
-  #   expose:
-  #     - '5432'
-  #   environment:
-  #     POSTGRES_USER: mydatabaseuser
-  #     POSTGRES_PASSWORD: mypassword
-  #     POSTGRES_DB: mydatabase
-
-# volumes:
-#   db_data:
