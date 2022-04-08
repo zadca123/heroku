@@ -14,7 +14,7 @@ export default function EditColumnForm(props){
     const [columnList, setColumnList] = useState([]);
 
     useEffect(() => {
-        axios.get(process.env.API_URL + 'column').then(response => {
+        axios.get(config.API_URL + 'column').then(response => {
 			setColumnList(response.data);
 		});
     }, []);
@@ -32,7 +32,7 @@ export default function EditColumnForm(props){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
-        axios.patch(process.env.API_URL + 'column/' + props.column.id + '/', {
+        axios.patch(config.API_URL + 'column/' + props.column.id + '/', {
             name: name,
             limit: limit
         }).then(response => {
@@ -46,7 +46,7 @@ export default function EditColumnForm(props){
     }
 
     function deleteColumn(){
-        axios.delete(process.env.API_URL + 'column/' + props.column.id + '/').then(response => {
+        axios.delete(config.API_URL + 'column/' + props.column.id + '/').then(response => {
             NotificationManager.success('Kolumna usunięta', 'Powiadomienie');
             props.onClose();
             const newColumnList = [];
@@ -58,7 +58,7 @@ export default function EditColumnForm(props){
                 newColumnList[i].position = i;
             }
             newColumnList.map(c => (
-                axios.patch(process.env.API_URL + 'column/' + c.id + '/', {
+                axios.patch(config.API_URL + 'column/' + c.id + '/', {
                     position: c.position
                 })
             ));

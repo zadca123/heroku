@@ -69,21 +69,21 @@ export default function EditTaskForm(props){
     const [taskUserList , setTaskUserList] = useState([]);
 
     useEffect(() => {
-        axios.get(process.env.API_URL + 'task').then(response => {
+        axios.get(config.API_URL + 'task').then(response => {
 			setTaskList(response.data);
 		});
         /*
-        axios.get(process.env.API_URL + 'column').then(response => {
+        axios.get(config.API_URL + 'column').then(response => {
 			setColumnList(response.data);
 		});
-        axios.get(process.env.API_URL + 'row').then(response => {
+        axios.get(config.API_URL + 'row').then(response => {
 			setRowList(response.data);
 		});
         */
-        axios.get(process.env.API_URL + 'user').then(response => {
+        axios.get(config.API_URL + 'user').then(response => {
 			setUserList(response.data);
 		});
-        axios.get(process.env.API_URL + 'taskUser').then(response => {
+        axios.get(config.API_URL + 'taskUser').then(response => {
 			setTaskUserList(response.data);
 		});
     }, []);
@@ -93,7 +93,7 @@ export default function EditTaskForm(props){
             NotificationManager.error('Niepoprawna nazwa', 'Błąd');
             return;
         }
-        axios.patch(process.env.API_URL + 'task/' + props.task.id + '/', {
+        axios.patch(config.API_URL + 'task/' + props.task.id + '/', {
             name: name,
             description: description,
             color: color
@@ -108,7 +108,7 @@ export default function EditTaskForm(props){
     }
 
     function resetColor(){
-        axios.patch(process.env.API_URL + 'task/' + props.task.id + '/', {
+        axios.patch(config.API_URL + 'task/' + props.task.id + '/', {
             color: ''
         }).then(response => {
             NotificationManager.success('Kolor zresetowany', 'Powiadomienie');
@@ -121,7 +121,7 @@ export default function EditTaskForm(props){
     }
 
     function deleteTask(){
-        axios.delete(process.env.API_URL + 'task/' + props.task.id + '/').then(response => {
+        axios.delete(config.API_URL + 'task/' + props.task.id + '/').then(response => {
             NotificationManager.success('Zadanie usunięte', 'Powiadomienie');
             props.onClose();
             const taskListFiltered = taskList.filter(t => t.column === props.task.column && t.row === props.task.row);
@@ -134,7 +134,7 @@ export default function EditTaskForm(props){
                 newTaskList[i].position = i;
             }
             newTaskList.map(t => (
-                axios.patch(process.env.API_URL + 'task/' + t.id + '/', {
+                axios.patch(config.API_URL + 'task/' + t.id + '/', {
                     position: t.position
                 })
             ));
@@ -148,12 +148,12 @@ export default function EditTaskForm(props){
     /*
     function setIsUserChecked(e, userId, taskUserId){
         if(e.target.checked){
-            axios.post(process.env.API_URL + 'taskUser/', {
+            axios.post(config.API_URL + 'taskUser/', {
                 task: props.task.id,
                 user: userId
             }).then(response => {
                 NotificationManager.success('Użytkownik przypięty', 'Powiadomienie');
-                axios.get(process.env.API_URL + 'taskUser').then(response => {
+                axios.get(config.API_URL + 'taskUser').then(response => {
                     setTaskUserList(response.data);
                 });
             })
@@ -162,9 +162,9 @@ export default function EditTaskForm(props){
             });
         }
         else{
-            axios.delete(process.env.API_URL + 'taskUser/' + taskUserId + '/').then(response => {
+            axios.delete(config.API_URL + 'taskUser/' + taskUserId + '/').then(response => {
                 NotificationManager.success('Użytkownik odpięty', 'Powiadomienie');
-                axios.get(process.env.API_URL + 'taskUser').then(response => {
+                axios.get(config.API_URL + 'taskUser').then(response => {
                     setTaskUserList(response.data);
                 });
             })

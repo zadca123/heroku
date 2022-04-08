@@ -13,7 +13,7 @@ export default function EditCellForm(props){
     const [limitList, setLimitList] = useState([]);
     
     useEffect(() => {
-        axios.get(process.env.API_URL + 'limit').then(response => {
+        axios.get(config.API_URL + 'limit').then(response => {
 			setLimitList(response.data);
 		});
     }, []);
@@ -25,7 +25,7 @@ export default function EditCellForm(props){
         }
         const cellList = limitList.filter(l => l.column === props.column.id && l.row === props.row.id);
         if(!props.cell && limit > 0){
-            axios.post(process.env.API_URL + 'limit/', {
+            axios.post(config.API_URL + 'limit/', {
                 column: props.column.id,
                 row: props.row.id,
                 limit: limit
@@ -40,7 +40,7 @@ export default function EditCellForm(props){
             return;
         }
         if(props.cell && limit === 0){
-            axios.delete(process.env.API_URL + 'limit/' + cellList[0].id + '/').then(response => {
+            axios.delete(config.API_URL + 'limit/' + cellList[0].id + '/').then(response => {
                 NotificationManager.success('Limit usunięty', 'Powiadomienie');
                 props.onClose();
                 props.onSave();
@@ -51,7 +51,7 @@ export default function EditCellForm(props){
             return;
         }
         if(props.cell && limit > 0 && props.cell.limit !== limit){
-            axios.patch(process.env.API_URL + 'limit/' + cellList[0].id + '/', {
+            axios.patch(config.API_URL + 'limit/' + cellList[0].id + '/', {
                 limit: limit
             }).then(response => {
                 NotificationManager.success('Limit zapisany', 'Powiadomienie');

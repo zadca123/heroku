@@ -14,7 +14,7 @@ export default function EditRowForm(props){
     const [rowList , setRowList] = useState([]);
 
     useEffect(() => {
-        axios.get(process.env.API_URL + 'row').then(response => {
+        axios.get(config.API_URL + 'row').then(response => {
 			setRowList(response.data);
 		});
     }, []);
@@ -32,7 +32,7 @@ export default function EditRowForm(props){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
-        axios.patch(process.env.API_URL + 'row/' + props.row.id + '/', {
+        axios.patch(config.API_URL + 'row/' + props.row.id + '/', {
             name: name,
             limit: limit
         }).then(response => {
@@ -46,7 +46,7 @@ export default function EditRowForm(props){
     }
 
     function deleteRow(){
-        axios.delete(process.env.API_URL + 'row/' + props.row.id + '/').then(response => {
+        axios.delete(config.API_URL + 'row/' + props.row.id + '/').then(response => {
             NotificationManager.success('Wiersz usunięty', 'Powiadomienie');
             props.onClose();
             const newRowList = [];
@@ -58,7 +58,7 @@ export default function EditRowForm(props){
                 newRowList[i].position = i;
             }
             newRowList.map(r => (
-                axios.patch(process.env.API_URL + 'row/' + r.id + '/', {
+                axios.patch(config.API_URL + 'row/' + r.id + '/', {
                     position: r.position
                 })
             ));

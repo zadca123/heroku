@@ -19,7 +19,7 @@ import EditTaskForm from './components/task/EditTaskForm';
 
 //import { io } from 'socket.io-client';
 
-//const socket = io(process.env.SOCKET_SERVER_URL);
+//const socket = io(config.SOCKET_SERVER_URL);
 
 const Container = styled.div`
 	height: 100vh;
@@ -379,37 +379,37 @@ export default function App(){
 	#####################################################################*/
 
 	function loadColumnList(){
-		axios.get(process.env.API_URL + 'column').then(response => {
+		axios.get(config.API_URL + 'column').then(response => {
 			setColumns(response.data);
 		});
 	}
 
 	function loadRowList(){
-		axios.get(process.env.API_URL + 'row').then(response => {
+		axios.get(config.API_URL + 'row').then(response => {
 			setRows(response.data);
 		});
 	}
 
 	function loadTaskList(){
-		axios.get(process.env.API_URL + 'task').then(response => {
+		axios.get(config.API_URL + 'task').then(response => {
 			setTasks(response.data);
 		});
 	}
 
 	function loadLimitList(){
-		axios.get(process.env.API_URL + 'limit').then(response => {
+		axios.get(config.API_URL + 'limit').then(response => {
 			setLimits(response.data);
 		});
 	}
 
 	function loadUserList(){
-		axios.get(process.env.API_URL + 'user').then(response => {
+		axios.get(config.API_URL + 'user').then(response => {
 			setUsers(response.data);
 		});
 	}
 
 	function loadTaskUserList(){
-		axios.get(process.env.API_URL + 'taskUser').then(response => {
+		axios.get(config.API_URL + 'taskUser').then(response => {
 			setTaskUser(response.data);
 		});
 	}
@@ -464,7 +464,7 @@ export default function App(){
 			}
 			setColumns(columns);
 			columns.map(c => (
-				axios.patch(process.env.API_URL + 'column/' + c.id + '/', {
+				axios.patch(config.API_URL + 'column/' + c.id + '/', {
 					position: c.position
 				})
 			));
@@ -491,7 +491,7 @@ export default function App(){
 			});
 			setRows(newRows);
 			newRows.map(r => (
-				axios.patch(process.env.API_URL + 'row/' + r.id + '/', {
+				axios.patch(config.API_URL + 'row/' + r.id + '/', {
 					position: r.position
 				})
 			));
@@ -514,7 +514,7 @@ export default function App(){
 					newList2.filter(t => t.position > source.index && t.position <= destination.index).forEach(t => {
 						//console.log(`${t.name}: ${t.position} -> ${t.position - 1}`);
 						t.position = t.position - 1;
-						axios.patch(process.env.API_URL + 'task/' + t.id + '/', {
+						axios.patch(config.API_URL + 'task/' + t.id + '/', {
 							position: t.position
 						});
 					});
@@ -524,7 +524,7 @@ export default function App(){
 					newList2.filter(t => t.position >= destination.index && t.position < source.index).forEach(t => {
 						//console.log(`${t.name}: ${t.position} -> ${t.position + 1}`);
 						t.position = t.position + 1;
-						axios.patch(process.env.API_URL + 'task/' + t.id + '/', {
+						axios.patch(config.API_URL + 'task/' + t.id + '/', {
 							position: t.position
 						});
 					});
@@ -532,7 +532,7 @@ export default function App(){
 				const dragElement = newList2.filter(t => t.id === id)[0];
 				//console.log(`${dragElement.name}: ${dragElement.position} -> ${destination.index}`);
 				dragElement.position = destination.index;
-				axios.patch(process.env.API_URL + 'task/' + dragElement.id + '/', {
+				axios.patch(config.API_URL + 'task/' + dragElement.id + '/', {
 					position: dragElement.position
 				});
 				newList.sort((a, b) => {
@@ -548,7 +548,7 @@ export default function App(){
 			destinationList.forEach(t => {
 				//console.log(`${t.name}: ${t.position} -> ${t.position + 1}`);
 				t.position = t.position + 1;
-				axios.patch(process.env.API_URL + 'task/' + t.id + '/', {
+				axios.patch(config.API_URL + 'task/' + t.id + '/', {
 					position: t.position
 				});
 			});
@@ -559,7 +559,7 @@ export default function App(){
 			dragElement.position = destination.index;
 			dragElement.column = destinationColumn;
 			dragElement.row = destinationRow;
-			axios.patch(process.env.API_URL + 'task/' + dragElement.id + '/', {
+			axios.patch(config.API_URL + 'task/' + dragElement.id + '/', {
 				position: dragElement.position,
 				column: dragElement.column,
 				row: dragElement.row
@@ -569,7 +569,7 @@ export default function App(){
 			sourceList.forEach(t => {
 				//console.log(`${t.name}: ${t.position} -> ${t.position - 1}`);
 				t.position = t.position - 1;
-				axios.patch(process.env.API_URL + 'task/' + t.id + '/', {
+				axios.patch(config.API_URL + 'task/' + t.id + '/', {
 					position: t.position
 				});
 			});
@@ -592,12 +592,12 @@ export default function App(){
 					NotificationManager.info('Użytkownik jest już przypięty do tego zadania');
 					return;
 				}
-				axios.post(process.env.API_URL + 'taskUser/', {
+				axios.post(config.API_URL + 'taskUser/', {
 					task: taskId,
 					user: userId
 				}).then(response => {
 					NotificationManager.success('Użytkownik przypięty', 'Powiadomienie');
-					axios.get(process.env.API_URL + 'taskUser').then(response => {
+					axios.get(config.API_URL + 'taskUser').then(response => {
 						setTaskUser(response.data);
 					});
 				})
@@ -609,9 +609,9 @@ export default function App(){
 			// Odpinanie użytkownika od zadania
 			if(destination.droppableId === 'user-container' && source.droppableId.split('-').length === 3){
 				const taskUserId = parseInt(e.draggableId.split('-')[1]);
-				axios.delete(process.env.API_URL + 'taskUser/' + taskUserId + '/').then(response => {
+				axios.delete(config.API_URL + 'taskUser/' + taskUserId + '/').then(response => {
 					NotificationManager.success('Użytkownik odpięty', 'Powiadomienie');
-					axios.get(process.env.API_URL + 'taskUser').then(response => {
+					axios.get(config.API_URL + 'taskUser').then(response => {
 						setTaskUser(response.data);
 					});
 				})
@@ -631,11 +631,11 @@ export default function App(){
 					NotificationManager.info('Użytkownik jest już przypięty do tego zadania');
 					return;
 				}
-				axios.patch(process.env.API_URL + 'taskUser/' + taskUserId + '/', {
+				axios.patch(config.API_URL + 'taskUser/' + taskUserId + '/', {
 					task: destinationTaskId
 				}).then(response => {
 					NotificationManager.success('Użytkownik przepięty', 'Powiadomienie');
-					axios.get(process.env.API_URL + 'taskUser').then(response => {
+					axios.get(config.API_URL + 'taskUser').then(response => {
 						setTaskUser(response.data);
 					});
 				})
