@@ -14,7 +14,7 @@ export default function AddColumnForm(props){
     const [columnList , setColumnList] = useState([]);
 
     useEffect(() => {
-        axios.get(config.API_URL + 'column').then(response => {
+        axios.get(process.env.API_URL + 'column').then(response => {
 			setColumnList(response.data);
 		});
     }, []);
@@ -32,7 +32,7 @@ export default function AddColumnForm(props){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
-        axios.post(config.API_URL + 'column/', {
+        axios.post(process.env.API_URL + 'column/', {
             name: name,
             position: columnList.length,
             limit: limit

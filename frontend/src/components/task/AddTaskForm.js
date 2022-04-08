@@ -18,13 +18,13 @@ export default function AddTaskForm(props){
     const [rowList , setRowList] = useState([]);
 
     useEffect(() => {
-        axios.get(config.API_URL + 'task').then(response => {
+        axios.get(process.env.API_URL + 'task').then(response => {
 			setTaskList(response.data);
 		});
-        axios.get(config.API_URL + 'column').then(response => {
+        axios.get(process.env.API_URL + 'column').then(response => {
 			setColumnList(response.data);
 		});
-        axios.get(config.API_URL + 'row').then(response => {
+        axios.get(process.env.API_URL + 'row').then(response => {
 			setRowList(response.data);
 		});
     }, []);
@@ -42,7 +42,7 @@ export default function AddTaskForm(props){
             NotificationManager.error('Wybierz wiersz', 'Informacja');
             return;
         }
-        axios.post(config.API_URL + 'task/', {
+        axios.post(process.env.API_URL + 'task/', {
             name: name,
             description: description,
             position: taskList.filter(t => t.column === column && t.row === row).length,

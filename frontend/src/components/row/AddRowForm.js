@@ -14,7 +14,7 @@ export default function AddRowForm(props){
     const [rowList , setRowList] = useState([]);
 
     useEffect(() => {
-        axios.get(config.API_URL + 'row').then(response => {
+        axios.get(process.env.API_URL + 'row').then(response => {
 			setRowList(response.data);
 		});
     }, []);
@@ -32,7 +32,7 @@ export default function AddRowForm(props){
             NotificationManager.error('Niepoprawny limit', 'Błąd');
             return;
         }
-        axios.post(config.API_URL + 'row/', {
+        axios.post(process.env.API_URL + 'row/', {
             name: name,
             position: rowList.length,
             limit: limit
