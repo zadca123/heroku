@@ -18,6 +18,8 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    # command: sh /code/backend/entrypoint.sh
+    # entrypoint: sh /code/deploy/docker/postgres/wait-for-postgres.sh
     # environment:
     #   DB_URL: mysql://db/procode
 
