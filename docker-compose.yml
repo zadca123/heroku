@@ -4,6 +4,7 @@ services:
   web:
     build:
       context: ./frontend
+    # env_file: .env
     ports:
       - "3000:3000"
     depends_on:
@@ -12,10 +13,14 @@ services:
   api:
     build:
       context: ./backend
+    # env_file: .env
     ports:
       - "8000:8000"
     depends_on:
       - db
+    # environment:
+    #   DB_URL: mysql://db/procode
+
   db:
     image: mysql:8.0
     restart: always
@@ -24,8 +29,14 @@ services:
     expose:
       - '3306'
     environment:
-      MYSQL_DATABASE: 'user'
-      MYSQL_USER: 'user'
+      MYSQL_DATABASE: 'procode'
+      # MYSQL_USER: 'user'
       # MYSQL_PASSWORD: 'user'
       # MYSQL_ROOT_PASSWORD: 'user'
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - "./config/my.conf:/etc/mysql/conf.d/config-file.cnf"
+      - "./data:/var/lib/mysql:rw"
+
+volumes:
+  procode:

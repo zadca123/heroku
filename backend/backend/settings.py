@@ -37,6 +37,7 @@ ALLOWED_HOSTS = [
     "kanbanapi.jrk.atthost24.pl",
     "localhost",
     "procodetest2.azurewebsites.net",
+    "0.0.0.0",
 ]
 
 ##################### DEV ONLY
@@ -46,6 +47,8 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://localhost:3000",
+    "http://0.0.0.0:3000",
+    "https://0.0.0.0:3000",
 ]
 
 # Application definition
@@ -100,11 +103,11 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "HOST": "db",
-        "PORT": "3306",
-        "NAME": "user",
-        "USER": "user",
-        "PASSWORD": "",
+        "NAME": os.getenv("DB_NAME", default="procode"),
+        "USER": os.getenv("DB_USER", default="root"),
+        "PASSWORD": os.getenv("DB_PASSWORD", default=""),
+        "HOST": os.getenv("DB_HOST", default="db"),
+        "PORT": os.getenv("DB_PORT", default="3306"),
         "OPTIONS": {"init_command": "SET sql_mode='STRICT_TRANS_TABLES'"},
     }
 }
